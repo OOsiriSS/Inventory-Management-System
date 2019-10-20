@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+	prefWidth="1050.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="presentation.salestockstaffui.controller.MemberManageController">
+	<children>
+		<ImageView fitHeight="600.0" fitWidth="150.0" pickOnBounds="true"
+			preserveRatio="true">
+			<image>
+				<Image url="@../img/管理.jpg" />
+			</image>
+		</ImageView>
+		<Button layoutX="150.0" layoutY="4.0" mnemonicParsing="false"
+			onAction="#returnLast" prefHeight="43.0" prefWidth="47.0"
+			style="-fx-background-color: rgba(0,0,0,0);">
+			<graphic>
+				<ImageView fitHeight="50.0" fitWidth="45.0" pickOnBounds="true"
+					preserveRatio="true">
+					<image>
+						<Image url="@../img/返回.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button layoutX="211.0" layoutY="6.0" mnemonicParsing="false"
+			onAction="#mainPage" prefHeight="44.0" prefWidth="54.0"
+			style="-fx-background-color: rgba(0,0,0,0);">
+			<graphic>
+				<ImageView fitHeight="40.0" fitWidth="47.0" pickOnBounds="true"
+					preserveRatio="true">
+					<image>
+						<Image url="@../img/主页.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button layoutX="327.0" layoutY="9.0" mnemonicParsing="false"
+			onAction="#message" prefHeight="43.0" prefWidth="47.0"
+			style="-fx-background-color: rgba(0,0,0,0);">
+			<graphic>
+				<ImageView fitHeight="36.0" fitWidth="44.0" pickOnBounds="true"
+					preserveRatio="true">
+					<image>
+						<Image url="@../img/消息.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button layoutX="955.0" layoutY="8.0" mnemonicParsing="false"
+			onAction="#logout" prefHeight="43.0" prefWidth="47.0"
+			style="-fx-background-color: rgba(0,0,0,0);">
+			<graphic>
+				<ImageView fitHeight="41.0" fitWidth="38.0" pickOnBounds="true"
+					preserveRatio="true">
+					<image>
+						<Image url="@../img/注销.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<ImageView fx:id="image" fitHeight="100.0" fitWidth="127.0"
+			layoutX="12.0" layoutY="123.0" pickOnBounds="true" preserveRatio="true">
+			<image>
+				<Image url="@../img/用户.png" />
+			</image>
+		</ImageView>
+		<ImageView fitHeight="60.0" fitWidth="114.0" layoutX="11.0"
+			layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+			<image>
+				<Image url="@../img/Logo.png" />
+			</image>
+		</ImageView>
+		<Button layoutX="7.0" layoutY="260.0" mnemonicParsing="false"
+			onAction="#memberManage" prefHeight="60.0" prefWidth="136.0"
+			style="-fx-background-color: rgba(0,0,0,0);" text="客户管理" textFill="WHITE">
+			<font>
+				<Font name="syht Italic" size="16.0" />
+			</font>
+			<graphic>
+				<ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true"
+					preserveRatio="true">
+					<image>
+						<Image url="@../img/客户.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button layoutX="259.0" layoutY="9.0" mnemonicParsing="false"
+			onAction="#fresh" prefHeight="44.0" prefWidth="68.0"
+			style="-fx-background-color: rgba(0,0,0,0);">
+			<graphic>
+				<ImageView fitHeight="150.0" fitWidth="35.0" pickOnBounds="true"
+					preserveRatio="true">
+					<image>
+						<Image url="@../img/刷新.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button layoutX="7.0" layoutY="320.0" mnemonicParsing="false"
+			onAction="#makeReceipt" prefHeight="60.0" prefWidth="136.0"
+			style="-fx-background-color: rgba(0,0,0,0);" text="制作单据" textFill="WHITE">
+			<font>
+				<Font name="syht Italic" size="16.0" />
+			</font>
+			<graphic>
+				<ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true"
+					preserveRatio="true">
+					<image>
+						<Image url="@../img/盘点.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<TableView fx:id="table" editable="true" layoutX="164.0"
+			layoutY="122.0" prefHeight="366.0" prefWidth="866.0">
+			<columns>
+				<TableColumn fx:id="tableID" prefWidth="75.0" text="编号" />
+				<TableColumn fx:id="tableCategory" prefWidth="75.0"
+					text="分类" />
+				<TableColumn fx:id="tableLevel" prefWidth="50.0" text="级别" />
+				<TableColumn fx:id="tableName" prefWidth="75.0" text="姓名" />
+				<TableColumn fx:id="tableAmount" prefWidth="75.0" text="应收额度" />
+				<TableColumn fx:id="tableReceive" prefWidth="50.0" text="应收" />
+				<TableColumn fx:id="tablePay" prefWidth="50.0" text="应付" />
+				<TableColumn fx:id="tablePhone" prefWidth="75.0" text="电话" />
+				<TableColumn fx:id="tableAddress" prefWidth="75.0" text="地址" />
+				<TableColumn fx:id="tableZipcode" prefWidth="50.0" text="邮编" />
+				<TableColumn fx:id="tableEmail" prefWidth="75.0" text="电子邮箱" />
+				<TableColumn fx:id="tableOperator" prefWidth="75.0"
+					text="默认业务员" />
+				<TableColumn fx:id="tableDelete" prefWidth="70.0" text="是否删除" />
+			</columns>
+		</TableView>
+		<ChoiceBox fx:id="findChoice" layoutX="164.0" layoutY="75.0"
+			prefWidth="150.0" />
+		<TextField fx:id="findingField" layoutX="314.0" layoutY="75.0"
+			prefHeight="23.0" prefWidth="655.0" />
+		<Button layoutX="969.0" layoutY="75.0" mnemonicParsing="false"
+			onAction="#find" prefHeight="23.0" prefWidth="61.0" text="查  询" />
+		<Label fx:id="idLabel" layoutX="164.0" layoutY="512.0"
+			prefHeight="23.0" prefWidth="75.0" style="-fx-background-color: #DDDDDD;" />
+		<ChoiceBox fx:id="classChoice" layoutX="239.0" layoutY="512.0"
+			prefHeight="23.0" prefWidth="75.0" />
+		<ChoiceBox fx:id="levelChoice" layoutX="314.0" layoutY="512.0"
+			prefHeight="23.0" prefWidth="50.0" />
+		<TextField fx:id="nameField" layoutX="364.0" layoutY="512.0"
+			prefHeight="23.0" prefWidth="75.0" />
+		<TextField fx:id="amountField" layoutX="439.0" layoutY="512.0"
+			prefHeight="23.0" prefWidth="76.0" />
+		<TextField fx:id="receiveField" layoutX="515.0" layoutY="512.0"
+			prefHeight="23.0" prefWidth="50.0" />
+		<TextField fx:id="payField" layoutX="565.0" layoutY="512.0"
+			prefHeight="23.0" prefWidth="50.0" />
+		<TextField fx:id="phoneField" layoutX="615.0" layoutY="512.0"
+			prefHeight="23.0" prefWidth="76.0" />
+		<TextField fx:id="addressField" layoutX="691.0" layoutY="512.0"
+			prefHeight="23.0" prefWidth="75.0" />
+		<TextField fx:id="zipcodeField" layoutX="766.0" layoutY="512.0"
+			prefHeight="23.0" prefWidth="50.0" />
+		<TextField fx:id="emailField" layoutX="816.0" layoutY="512.0"
+			prefHeight="23.0" prefWidth="75.0" />
+		<TextField fx:id="operatorField" layoutX="891.0" layoutY="512.0"
+			prefHeight="23.0" prefWidth="75.0" />
+		<Button layoutX="966.0" layoutY="512.0" mnemonicParsing="false"
+			onAction="#insert" prefHeight="23.0" prefWidth="70.0" text="增   加" />
+	</children>
+</AnchorPane>
