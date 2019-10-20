@@ -1,0 +1,1819 @@
+# 企业进销存系统 SIMS(Sales Invoicing Management System)
+
+# 软件体系结构描述文档
+
+# 草稿
+
+## plsw软工二小组
+
+## 2017-10-22
+
+## 更新历史
+
+| **修改人员** | **日期**     | **变更原因** | **版本号** |
+| -------- | ---------- | -------- | ------- |
+| 王灿灿 | 2017-10-19 | 创建文档  | V1.0 草稿 |
+| 李杰 | 2017-10-22 | 添加信息视角及目录 | V1.1 草稿 |
+| 潘星宇 | 2017-10-22 | 添加数据层的分解和开发包图等 | V1.2草稿 |
+| 王灿灿 | 2017-10-22 | 添加业务逻辑层的分解 |V1.3草稿|
+| 孙嘉杰| 2017-10-22 | 添加用户界面层 |V1.4草稿|
+| 孙嘉杰| 2018-1-2 | 初步修改 |V1.5草稿|
+| 王灿灿| 2018-1-6 | 修改完成库存管理人员文档、修改财务account文档 |v1.6草稿|
+| 李杰 | 2018-01-08 | 修改进货销售人员文档 | v1.7草稿 |
+| 王灿灿| 2018-1-10 | 修改数据层文档格式，修改库存财务人员接口形式，文档完成 |v2.0|
+
+# 目录
+
+## 1.引言
+
+   **1.1. 编制目的**　　
+   **1.2. 词汇表**　　
+   **1.3. 参考资料**
+
+## 2.产品描述
+
+## 3.逻辑视角
+
+## 4.组合视角
+
+  **4.1.开发包图**
+  **4.2.运行时进程**
+  **4.3.物理部署**
+
+## 5.接口视角
+
+  **5.1.模块的职责**
+  **5.2.用户界面层的分解**
+   * 5.2.1.用户界面层模块的职责
+   * 5.2.2.用户界面模块的接口规范
+   * 5.2.3.用户界面模块设计原理
+
+  **5.3.业务逻辑层的分解**
+   * 5.3.1.业务逻辑层模块的职责
+   * 5.3.2.业务逻辑模块的接口模范
+
+  **5.4.数据层的分解**
+   * 5.4.1.数据层模块的职责
+   * 5.4.2.数据层模块的接口规范
+
+## 6.信息视角
+
+  **6.1.数据持久化对象**
+  **6.2.Txt持久化格式**
+  **6.3.数据库表**
+  **6.4.文件格式**
+
+
+
+# 1.引言
+  **1.1 编制目的**
+
+  本报告详细完成对企业进销存系统（SIMS）的概要设计，达到指导详细设计和开发的目的，同时实现和测试人员及用户的沟通。
+  本报告面向开发人员、测试人员及最终用户而编写，是了解系统的导航。
+
+   **1.2词汇表**
+
+| 词汇名称 | 词汇含义    | 备注   |
+| ---- | ------- | ---- |
+| SIMS | 企业进销存系统 |      |
+<br/>
+   **1.3参考资料**
+
+# 2.产品概述
+  参考企业进销存系统用例文档和企业进销存系统软件需求规格说明中对产品的概括描述
+
+# 3.逻辑视角
+  企业进销存系统中，选择了分层体系结构风格，将系统分为3层（展示层、业务逻辑层、数据层）能够很好地示意整个高层抽象。展示层包含GUI页面的实现，业务逻辑层包含业务逻辑处理的实现，数据层负责数据的持久化和访问。分层体系结构的逻辑设计方案如图所示。
+
+  软件体系结构逻辑设计方案
+  <img src="../img/体系结构设计模型.png">
+
+
+# 4.组合视角
+## 4.1开发包图
+<table><tbody>
+     <tr>
+     <td>开发（物理）包</td>
+     <td>依赖的其他开发包</td>
+     </tr>
+     <tr>
+     <td>mainui</td>
+     <td>userui,accountui,commodityui,mermberui,salesui,promotionui,vo</td>
+     </tr>
+
+<tr>
+      <td>accountsui</td>
+      <td>accountblservice,界面类库存包</td>
+     </tr>
+<tr>
+      <td>accountsblservice</td>
+      <td></td>
+     </tr>
+<tr>
+      <td>accountbl</td>
+      <td>accountblservice,accountdataservice,po,salesbl,userbl</td>
+     </tr>
+<tr>
+      <td>accountsdataservice</td>
+      <td>Java RMI,po</td>
+     </tr>
+<tr>
+      <td>accountdata</td>
+      <td></td>
+     </tr>
+
+<tr>
+      <td>commodityui</td>
+      <td>commodityblservice,界面类库存包</td>
+     </tr>
+<tr>
+      <td>commodityblservice</td>
+      <td></td>
+     </tr>
+<tr>
+      <td>commoditybl</td>
+      <td>commodityblservice,commoditydataservice,po,salesbl</td>
+     </tr>
+<tr>
+      <td>commoditydataservice</td>
+      <td>Java RMI,po</td>
+     </tr>
+<tr>
+      <td>commoditydata</td>
+      <td>Java RMI,po,databaseutility</td>
+     </tr>
+
+<tr>
+      <td>memberui</td>
+      <td>memberservice,界面类库存包</td>
+     </tr>
+<tr>
+      <td>memberblservice</td>
+      <td></td>
+     </tr>
+<tr>
+      <td>memberbl</td>
+      <td>memberblservice,memberdataservice,po,salesbl,commoditybl</td>
+     </tr>
+<tr>
+      <td>memberdataservice</td>
+      <td>Java RMI,po</td>
+     </tr>
+<tr>
+      <td>memberdata</td>
+      <td></td>
+     </tr>
+
+<tr>
+      <td>userui</td>
+      <td>userblservice,界面类库存包</td>
+     </tr>
+<tr>
+      <td>userblservice</td>
+      <td></td>
+     </tr>
+<tr>
+      <td>userbl</td>
+      <td>UserInterface,UserDataClient,UserPO</td>
+     </tr>
+<tr>
+      <td>userdataservice</td>
+      <td>Java RMI,po</td>
+     </tr>
+<tr>
+      <td>userdata</td>
+      <td>Java RMI,po,databaseutility</td>
+     </tr>
+
+     <tr>
+      <td>salesui</td>
+      <td>salesblservice,界面类库包,vo</td>
+     </tr>
+<tr>
+      <td>salesblservice</td>
+      <td></td>
+     </tr>
+<tr>
+      <td>salesbl</td>
+      <td>salesblservice,salesdataservice,po,promotionbl,userbl</td>
+     </tr>
+<tr>
+      <td>salesdataservice</td>
+      <td>Java RMI,po</td>
+     </tr>
+<tr>
+      <td>salesdata</td>
+      <td>databaseutility,po,salesdataservice</td>
+     </tr>
+
+
+<tr>
+      <td>promotionui</td>
+      <td>promotionservice,界面类库存包</td>
+     </tr>
+<tr>
+      <td>promotionblservice</td>
+      <td></td>
+     </tr>
+<tr>
+      <td>promotionbl</td>
+      <td>promotionblservice,promotiondataservice,vo</td>
+     </tr>
+<tr>
+      <td>promotiondataservice</td>
+      <td>Java RMI,po</td>
+     </tr>
+<tr>
+      <td>promotiondata</td>
+      <td>Java RMI,po,databaseutility</td>
+     </tr>
+
+<tr>
+      <td>vo</td>
+      <td></td>
+     </tr>
+<tr>
+      <td>po</td>
+      <td></td>
+     </tr>
+<tr>
+      <td>utilitybl</td>
+      <td></td>
+     </tr>
+<tr>
+      <td>界面类库包</td>
+      <td></td>
+     </tr>
+<tr>
+      <td>Java RMI</td>
+      <td></td>
+     </tr>
+<tr>
+      <td>databaseutility</td>
+      <td>JDBC</td>
+     </tr>
+
+
+</table>
+
+<img src="../img/客户端开发包图.png">
+
+<img src = "../img/服务端开发包.png">
+
+##4.2 运行时进程
+<img src = "../img/进程图.png">
+
+##4.3 物理部署
+<img src = "../img/部署图.png">
+
+# 5.接口视角
+  **5.1 模块的职责**  
+
+  客户端模块和服务器端模块视图分别如图x和图x所示。客户端各层和服务器端各层的职责分别如表2和表3所示。
+
+  表2 客户端各层的职责  
+
+| 层    | 职责                 |
+| ---- | ------------------ |
+| 启动模块 | 负责初始化网络通信机制，启动用户界面 |
+|用户界面层|基于窗口的连锁商店客户端用户界面|体系结构设计模型.png
+|业务逻辑层|对于用户界面的输入进行响应并进行业务处理逻辑|
+|客户端网络模块|利用 Java RMI 机制查找 RMI 服务|
+<br/>
+
+  表3 服务器端各层的职责  
+
+| 层        | 职责                                |
+| -------- | --------------------------------- |
+| 启动模块     | 负责初始化网络通信机制，启动用户界面                |
+| 数据层      | 负责数据的持久化及数据访问接口                   |
+| 服务器端网络模块 | 利用 Java RMI 机制开启 RMI 服务，注册 RMI 服务 |
+<br/>
+  每一层只是使用下方直接接触的层。层与层之间仅仅是通过接口的调用来完成的。层之间调用的接口如表4所示
+
+  表4 层之间调用的接口
+
+| 服务调用方    | 服务提供方    | 接口                    |
+| -------- | -------- | --------------------- |
+| 客户端展示层   | 客户端业务逻辑层 | accountblservice      |
+|          |          | commodityblservice    |
+|          |          | memberblservice       |
+|          |          | promotionblservice    |
+|          |          | salesblservice        |
+|          |          | userblservice         |
+|          |          | utilityblservice      |
+| 客户端业务逻辑层 | 服务器端数据层  | accountservice        |
+|          |          | commmoditydataservice |
+|          |          | datafactoryservice    |
+|          |          | uinitdataservice       |
+|          |          | memberdataservice     |
+|          |          | promotiondataservice  |
+|          |          | salesdataservice      |
+|          |          | userdataservice       |
+
+  **5. 2用户界面层的分解**
+
+<img src="../img/用户界面层.png">
+
+5.2.1 用户界面层模块的职责
+
+| 模块             | 职责                              |
+| -------------- | ------------------------------- |
+|Mainframe      | 界面Frame，负责界面的显示和界面的跳转   
+
+5.2.2 用户界面层模块的接口规范
+
+Mainframe
+语法 init（agrs：String[])
+前置条件 无
+后置条件 显示Frame以及Loginpanel
+
+| 服务名             | 服务                              |
+| -------------- | ------------------------------- |
+| businesslogicservice.LoginBLService      | 登录界面的业务逻辑接口                |
+|  businesslogicservice.*BLService         | 每个界面都有一个相应的业务逻辑接口              |        
+
+5.2.3 用户界面模块设计原理
+
+JavaFX        
+
+
+  **5.3 业务逻辑层的分解**
+
+业务逻辑层包括多个针对界面的业务逻辑处理对象。
+
+5.3.1　业务逻辑层模块的职责
+
+  　业务逻辑层模块的职责如表8所示  
+
+| 模块            | 职责                              |
+| -------------- | ------------------------------- |
+| accountbl      | 负责实现银行账户界面所需要的服务                |
+| paymentbillbl  | 负责实现制定付款单界面所需要的服务               |
+| receiptbillbl  | 负责实现制定收款单所需要的服务                |
+| accountbookbl  | 负责实现期初建账界面所需要的服务               |
+| businesshistorybl |负责实现查看经营历程表界面所需要的服务      |
+| bisinesssituationbl |负责实现查看经营情况表界面所需要的服务        |
+| saleschedulebl | 负责实现查看销售明细表所需要的服务            |
+| commoditybl    | 负责实现商品界面所需要的服务                  |
+| classificationbl| 负责实现商品分类管理界面所需要的服务          |
+| inventorybillbl| 负责实现库存类单据界面所需要的服务
+| memberbl       | 负责实现会员界面所需要的服务                  |
+| promotionbl    | 负责实现促销界面所需要的服务                  |
+| salesbl        | 负责实现销售界面所需要的服务                  |
+| userbl         | 负责实现用户界面所需要的服务                  |
+
+5.3.2　业务逻辑层模块的接口规范
+
+　**userbl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|**User.login**|语法|`public boolean login(String id, String passWord)`|
+||前置条件|password符合输入规则|
+||后置条件|查找是否存在相应的用户，根据输入的password返回登录验证的bool值|
+|**User.find**|语法|`public ArrayList<UserVO> find(String info,FindUserType properties)`|
+||前置条件|关键词Info输入符合规则|
+||后置条件|返回符合关键词的用户的列表|
+|**User.insert**|语法|`public ResultMessage insert(UserVO vo)`|
+||前置条件|用户信息符合规则|
+||后置条件|查找该用户是否已存在，若不存在则插入，返回插入验证的结果|
+|**User.delete**|语法|`public ResultMessage delete(UserVO vo)`|
+||前置条件|用户信息符合规则|
+||后置条件|查找该用户是否已存在，若存在则删除该用户信息，返回删除验证的结果|
+|**User.update**|语法|`public ResultMessage update(UserVO vo)`|
+||前置条件|用户信息符合规则|
+||后置条件|查找该用户是否已存在，若存在则更新该用户信息，返回更新验证的结果|
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|Userdataservice.login(String id,String password)|根据id和password进行登录|
+|Userdataservice.insert(User PO)|插入单一持久化对象|
+|Userdataservice.delete(User PO)|删除单一持久化对象|
+|Userdataservice.update(User PO)|更新单一持久化对象|
+|Userdataservice.find(String info,FindUserType type)|根据Info查找多个持久化对象|
+|Userdataservice.show()|返回数据库中所有持久化对象|
+<br/>
+
+　**commoditybl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|Commodity.getID|语法|`public String getID(String name)`|
+||前置条件|启动一个新增商品的回合,name符合输入规则|
+||后置条件|返回待新增商品的id|
+|Commodity.insert|语法|`public ResultMessage insert(CommodityVO vo)`
+||前置条件|商品信息符合规则|
+||后置条件|查找是否有该商品，若不存在则插入，返回插入验证的结果|
+|Commodity.delete|语法|`public void delete(CommodityVO vo)`|
+||前置条件|商品信息符合规则|
+||后置条件|查找是否有该商品，若存在则删除|
+|Commodity.update|语法|`public ResultMessage update(CommodityVO vo)`|
+||前置条件|商品信息符合规则|
+||后置条件|查找是否有该商品，若存在则更新商品信息，返回更新验证的结果|
+|Commodity.find|语法|`public ArrayList<CommodityVO> find(String info,FindCommodityType properties)`|
+||前置条件|关键词Info输入符合规则|
+||后置条件|返回符合关键词的商品列表|
+|Commodity.show|语法|`public ArrayList<CommodityVO> show()`|
+||前置条件|启动一个库存查看回合|
+||后置条件|返回所有的商品列表|
+|Commodity.getIDandName|语法|`public ArrayList<String> getIDandName()`|
+||前置条件|需要查找当前系统内的商品|
+||后置条件|返回所有商品的IDandName|
+|Commodity.getAllChildrenClass|语法|`public ArrayList<String> getAllChildrenClass()`|
+||前置条件|需要查找当前系统内的商品|
+||后置条件|返回所有分类下是商品的分类和分类子类为空的分类|
+|Commodity.check|语法|`public ArrayList<CommodityCheckVO> check(LocalDate start,LocalDate end)`|
+||前置条件|启动一个库存查看回合，得到起止日期|
+||后置条件|根据起止日期返回库存查看List|
+|Commodity.stock|语法|`public ArrayList<CommodityStockVO> stock()`|
+||前置条件|启动一个库存盘点回合|
+||后置条件|返回当天的库存快照List|
+|Commodity.exportReport|语法|`public void exportReport(ArrayList<CommodityStockVO>`|
+||前置条件|得到当天的库存快照List|
+||后置条件|导出excel表格|
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|CommodityDataService.insert(CommodityPO po)|插入单一持久化对象|
+|CommodityDataService.delelte(String id)|删除单一持久化对象|
+|CommodityDataService.update(CommodityPO po)|更新单一持久化对象|
+|CommodityDataService.find(String keywords,FindCommodityType type)|根据keywords查找多个持久化对象|
+|CommodityDataService.show()|返回数据库中所有持久化对象|
+<br/>
+
+　**classificationbl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|Classification.getID|语法|`public String getID()`|
+||前置条件|启动一个新增分类的回合|
+||后置条件|返回待新增分类的ID|
+|Classification.insert|语法|`public ResultMessage insert(ClassificationVPO vpo)`|
+||前置条件|分类信息符合规则|
+||后置条件|查找是否存在该分类，若不存在则插入，返回插入验证的结果|
+|Classification.delete|语法|`public void delete(ClassificationVPO vpo)`|
+||前置条件|分类信息符合规则|
+||后置条件|查找是否有该商品，若存在则删除|
+|Classification.update|语法|`public ResultMessage update(ClassificationVPO vpo)`|
+||前置条件|分类信息符合规则|
+||后置条件|查找是否有该商品，若存在则更新，返回更新验证的结果|
+|Classification.showName|语法|`public ArrayList<String> showName()`|
+||前置条件|需要查找当前系统内所有的分类|
+||后置条件|返回所有分类的name|
+|Classification.getClass|语法|`public ClassificationVPO getClass(String name)`|
+||前置条件|name符合规则|
+||后置条件|返回根据name找到的分类|
+|Classification.getRoot|语法|`public ClassificationVPO getRoot()`|
+||前置条件|启动一个商品分类管理的回合|
+||后置条件|返回商品分类的根节点|
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|ClassificationDataService.insert()|插入单一持久化对象|
+|ClassificationDataService.update|更新打印持久化对象|
+|ClassificationDataService.delete|删除单一持久化对象|
+|ClassificationDataService.getRoot|返回数据库中根节点持久化对象|
+|ClassificationDataService.find(String name)|根据name查找单一持久化对象|
+|ClassificationDataService.show|返回数据库中所有持久化对象|
+|ClassificationDataService.getId|返回待新增分类的Id|
+<br/>
+
+　**InventoryBillbl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|InventoryBill.getID|语法|`public String getId(BillType type)`|
+||前置条件|启动一个新增库存类单据的回合|
+||后置条件|返回待新增单据的ID|
+|InventoryBill.save|语法|`public ResultMessage save(InventoryBillVO vo)`|
+||前置条件|单据信息符合规则|
+||后置条件|查找是否存在该单据，若不存在则新增，存在则更新，返回保存验证的结果|
+|InventoryBill.delete|语法|`public void delete(InventoryBillVO clickedItem)`|
+||前置条件|单据符合规则|
+||后置条件|查找是否有该单据，若存在则删除|
+|InventoryBill.submit|语法|`public ResultMessage submit(InventoryBillVO clickedItem)`|
+||前置条件|单据信息符合规则|
+||后置条件|查找是否有该单据，若存在则修改单据状态为已提交，返回提交验证的结果|
+|InventoryBill.show|语法|`public ArrayList<InventoryBillVO> show()`|
+||前置条件|启动一个查看过往单据的回合|
+||后置条件|返回系统中所有的库存类单据的list|
+|InventoryBill.find|语法|`public ArrayList<InventoryBillVO> find(String text, FindInventoryBillType type)`|
+||前置条件|text符合规则|
+||后置条件|返回符合text的库存类单据的列表|
+
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|InventoryBillDataService.insert|插入单一持久化对象|
+|InventoryBillDataService.update|更新打印持久化对象|
+|InventoryBillDataService.delete|删除单一持久化对象|
+|InventoryBillDataService.find(String keyword,FindInventoryBillType type)|根据keword查找多个持久化对象|
+|InventoryBillDataService.show|返回数据库中所有持久化对象|
+<br/>
+
+　**memberbl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|Member.getID|语法|`public String getID()`|
+|前置条件|需要获取最新用户ID|
+|后置条件|返回用户ID|
+|Member.show|语法|`public ArrayList<MemberVO> show()`|
+|前置条件|需要get客户列表|
+|后置条件|返回客户列表|
+|Member.find|语法|`public ArrayList<MemberVO> find(String keyword, FindMemberType type)`|
+|前置条件|keyWord符合输入条件|
+|后置条件|返回符合条件的客户列表|
+|Member.insert|语法|`public ResultMessage insert(MemberVO vo)`|
+|前置条件|vo符合条件|
+|后置条件|向数据层插入数据|
+|Member.update|语法|`public ResultMessage update(MemberVO vo)`|
+|前置条件|vo符合条件|
+|后置条件|更新数据层数据|
+|Member.delete|语法|`public ResultMessage delete(String ID)`|
+|前置条件|ID符合条件|
+|后置条件|向数据层插入数据|
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|Member.insert()|新增单一持久化对象|
+|Member.update|更新打印持久化对象|
+|Member.delete|删除单一持久化对象|
+|Member.show()|显示全部持久化对象|
+|Member.find()|寻找所有符合条件的持久化对象|
+
+　**salebl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|Sale.getSaleID|语法|`public String getSaleID()`|
+||前置条件|需要销售单ID|
+||后置条件|返回一个自动生成的销售单ID|
+|Sale.getSaleBackID|语法|`public String getBackID()`|
+||前置条件|需要销售退货单ID|
+||后置条件|返回销售退货单ID|
+|Sale.submit|语法|`public ResultMessage submit(SalesVO Info)`|
+||前置条件|启动一个销售（退货）回合|
+||后置条件|创建提交销售(退货)单|
+|Sale.save|语法|`public ResultMessage save(SalesVO Info)`|
+||前置条件|已经创建销售(退货)单|
+||后置条件|保存草稿单据|
+|Sale.show|语法|`public ArrayList<SalesVO> show()`|
+||前置条件|需要获取全部的销售单|
+||后置条件|返回数据库里全部的销售单|
+|Sale.find|语法|`public ArrayList<SalesVO> find(String info,FindSalesType type)`|
+||前置条件|查找全部符合条件的销售单|
+||后置条件|返回数据库里全部符合条件的销售单|
+|Sale.isLegal|语法|`public ResultMessage isLegal(CommodityItemVO item)`|
+||前置条件|输入商品清单信息|
+||后置条件|返回数据是否合法|
+|Sale.showPricePacks|语法|`public ArrayList<PromotionPricePacksVO> showPricePacks()`|
+||前置条件|创建销售单时需要获取特价包信息|
+||后置条件|返回数据库里全部特价包|
+|Sale.FindMemberPromotion|语法|`public ArrayList<PromotionMemberVO> FindMemberPromotion()`|
+||前置条件|创建销售单时需要获取等级促销包信息|
+||后置条件|返回数据库里全部等级促销包|
+|Sale.FindTotalPromotion|语法|`public ArrayList<PromotionTotalVO> FindTotalPromotion()`|
+||前置条件|创建销售单时需要获取总价包信息|
+||后置条件|返回数据库里全部总价包|
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|Sale.insert()|新增单一持久化对象|
+|Sale.update|更新打印持久化对象|
+|Sale.delete|删除单一持久化对象|
+|Sale.show()|显示全部持久化对象|
+|Sale.find()|寻找所有符合条件的持久化对象|
+
+
+**salebl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|Purchase.getPurchaseID|语法|`public String getPurchaseID()`|
+||前置条件|需要进货单ID|
+||后置条件|返回一个自动生成的进货单ID|
+|Purchase.getPurchaseBackID|语法|`public String getPurchaseBackID()`|
+||前置条件|需要进货退货单ID|
+||后置条件|返回销售退货单ID|
+|Purchase.submit|语法|`public ResultMessage submit(PurchaseVO vo)`|
+||前置条件|启动一个进货（退货）回合|
+||后置条件|创建提交进货(退货)单|
+|Purchase.save|语法|`public ResultMessage save(PurchaseVO vo)`|
+||前置条件|已经创建进货(退货)单|
+||后置条件|保存草稿单据|
+|Purchase.show|语法|`public ArrayList<PurchaseVO> show()`|
+||前置条件|需要获取全部的进货单|
+||后置条件|返回数据库里全部的进货单|
+|Purchase.find|语法|`public ArrayList<PurchaseVO> find(String info,FindSalesType type)`|
+||前置条件|查找全部符合条件的进货单|
+||后置条件|返回数据库里全部符合条件的进货单|
+|Purchase.isLegal|语法|`public ResultMessage isLegal(CommodityItemVO item)`|
+||前置条件|输入商品清单信息|
+||后置条件|返回数据是否合法|
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|Purchase.insert()|新增单一持久化对象|
+|Purchase.update|更新打印持久化对象|
+|Purchase.delete|删除单一持久化对象|
+|Purchase.show()|显示全部持久化对象|
+|Purchase.find()|寻找所有符合条件的持久化对象|
+
+
+
+　**Accountbl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|Account.find|语法|`public ArrayList<AccountVO> find(String message, FindAccountType findType)`|
+||前置条件|关键词message符合输入规则|
+||后置条件|返回符合关键词的账户列表|
+|Account.add|语法|`public ResultMessage add(AccountVO accountVO)`|
+||前置条件|账户信息符合规则|
+||后置条件|查找该账户是否存在，若不存在则新增，返回新增验证的结果|
+|Account.delete|语法|`public void delete(AccountVO accountVO)`|
+||前置条件|账户信息符合规则|
+||后置条件|查找该账户是否存在，若存在则删除|
+|Account.modify|语法|`public ResultMessage modify(AccountVO accountVO)`|
+||前置条件|账户信息符合规则|
+||后置条件|查找该账户是否存在，若存在则更新数据，返回更新验证的结果|
+|Account.judgeLegal|语法|`public ResultMessage judgeLegal(AccountVO accountVO)`|
+||前置条件|需要对账户进行新增修改操作|
+||后置条件|返回判断验证的结果|
+|Account.show|语法|`public ArrayList<AccountVO> getAccountList()`|
+||前置条件|启动一个账户管理回合|
+||后置条件|返回系统中所有的账户的List|
+
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|AccountDataService.find(String keywords, FindAccountType type)|根据keywords查找单一持久化对象|
+|AccountDataService.insert|新建单一持久化对象|
+|AccountDataService.delete|删除单一持久化对象|
+|AccountDataService.update|更新单一持久化对象|
+|AccountDataService.show|返回数据库中所有持久化对象|
+|AccountDataService.updateMoney(String id, double money)|更新id对应账户的银行账户信息|
+<br/>
+
+　**PaymentBillbl模块的接口规范(ReceiptBillbl类似)**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|PaymentBill.getID|语法|`public String getId()`|
+||前置条件|启动一个新增付款单的回合|
+||后置条件|返回待新增单据的ID|
+|PaymentBill.save|语法|`public ResultMessage save(PaymentBillVO paymentBillVO)`|
+||前置条件|单据信息符合规则|
+||后置条件|查找是否存在该单据，若不存在则新增，存在则更新，返回保存验证的结果|
+|PaymentBill.delete|语法|`public ResultMessage delete(PaymentBillVO paymentBillVO)`|
+||前置条件|单据符合规则|
+||后置条件|查找是否有该单据，若存在则删除，返回删除验证的结果|
+|PaymentBill.commit|语法|`public ResultMessage commit(PaymentBillVO paymentBillVO)`|
+||前置条件|单据信息符合规则|
+||后置条件|查找是否有该单据，若存在则修改单据状态为已提交，返回提交验证的结果|
+|PaymentBill.show|语法|`public ArrayList<PaymentBillVO> show()`|
+||前置条件|启动一个查看过往单据的回合|
+||后置条件|返回系统中所有的付款单的list|
+|PaymentBill.find|语法|`public ArrayList<PaymentBillVO> find(String info,FindAccountBillType type)`|
+||前置条件|info符合规则|
+||后置条件|返回符合info的库存类单据的列表|
+|PaymentBill.getAccountList|语法|`public ArrayList<String> getAccountList();`|
+||前置条件|启动一个新建付款单的回合|
+||后置条件|返回系统中银行账户名的列表|
+|PaymentBill.getCustomerList|语法|`public ArrayList<String> getCustomerList()`|
+||前置条件|启动一个新建付款单的回合|
+||后置条件|返回系统中客户名的列表|
+|PaymentBill.judgeLegal|语法|`public ResultMessage judgeLegal(String money)`|
+||前置条件|需要对付款单进行金额的新增修改操作|
+||后置条件|返回判断验证的结果|
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|PaymentBillDataService.insert|插入单一持久化对象|
+|PaymentBillDataService.update|更新打印持久化对象|
+|PaymentBillDataService.delete|删除单一持久化对象|
+|PaymentBillDataService.find(String keyword,FindInventoryBillType type)|根据keword查找多个持久化对象|
+|PaymentBillDataService.show|返回数据库中所有持久化对象|
+<br/>
+
+　**businesshistorybl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|businesshistory.show|语法|` public ArrayList<B> show()`|
+||前置条件|启动一个查看经营历程表的回合|
+||后置条件|返回通过审批的对应单据|
+|businesshistory.siftTime|语法|`public ArrayList<B> siftTime(LocalDate start,LocalDate end)`|
+||前置条件|输入合理的筛选条件范围|
+||后置条件|返回筛选出的单据|
+|businesshistory.sift|语法|`public ArrayList<B> sift(String  info,FindSaleScheduleType type)`|
+||前置条件|info符合输入规则|
+||后置条件|返回符合info的单据列表|
+|businesshistory.exportReport|语法|`public void exportReport(ArrayList<B> table)`|
+||前置条件|启动生成表格的回合|
+||后置条件|导出excel表格|
+|businesshistory.writeOff|语法|`public ArrayList<B> writeOff(ArrayList<B> table)`|
+||前置条件|启动一个红冲回合|
+||后置条件|进行红冲操作并将单据入账并返回红冲后的单据|
+|businesshistory.writeOffAndCopy|语法|`public ArrayList<B> writeOffAndCopy(ArrayList<B> table)`|
+||前置条件|启动一个红冲并复制回合|
+||后置条件|将单据入账，返回操作后的单据|
+|businesshistory.updateBill|语法|`public ResultMessage updateBill(B table)`|
+||前置条件|启动一个红冲并复制回合|
+||后置条件|进行红冲并复制操作并将单据入账|
+
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|purchaseservice.show|获得系统中的进货单和进货退货单|
+|salesservice.show|获得系统中的销售单和销售退货单|
+|paymentbillservice.show|获得系统中的付款单|
+|receiptbillservice.show|获得系统中的收款单|
+|inventorybillservice.show|获得系统中的库存类单据|
+|examineblservice.passbill|审批单据|
+<br/>
+　**businesssituationbl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|businesssituation.showPay|语法|`public ArrayList<PaymentTableVO> showPay()`|
+||前置条件|启动一个查看经营情况表的回合|
+||后置条件|返回支出类|
+|businesssituation.showReceive|语法|`public ArrayList<ReceiveTableVO> showReceive()`|
+||前置条件|启动一个查看经营情况表的回合|
+||后置条件|返回收入类|
+|businesssituation.siftPay|语法|`public ArrayList<PaymentTableVO> siftPay(LocalDate start,LocalDate end)`|
+||前置条件|输入合理的筛选条件范围|
+||后置条件|返回筛选出的付款单List|
+|businesssituation.siftReceive|语法|`public ArrayList<ReceiveTableVO> siftReceive(LocalDate start,LocalDate end)`|
+||前置条件|输入合理的筛选条件范围|
+||后置条件|返回筛选出的收款单List|
+|businesssituation.exportReport|语法|`public void exportReport(ArrayList<PaymentTableVO> pay,ArrayList<ReceiveTableVO> receive)`|
+||前置条件|启动生成表格的回合|
+||后置条件|导出excel表格|
+
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|paymentbillservice.show|获得系统中的付款单|
+|receiptbillservice.show|获得系统中的收款单|
+<br/>
+　**saleschedulebl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|saleschedule.show|语法|` public ArrayList<SaleScheduleVO> show()`|
+||前置条件|启动一个查看销售明细表的回合|
+||后置条件|返回通过审批的对应单据的销售信息|
+|saleschedule.siftTime|语法|`public ArrayList<SaleScheduleVO> siftTime(LocalDate start,LocalDate end)`|
+||前置条件|输入合理的筛选条件范围|
+||后置条件|返回筛选出的单据的销售信息|
+|saleschedule.sift|语法|`public ArrayList<SaleScheduleVO> sift(String info,FindSaleScheduleType type)`|
+||前置条件|info符合输入规则|
+||后置条件|返回符合info的单据列表的对应销售信息|
+|saleschedule.exportReport|语法|`public void exportReport(ArrayList<SaleScheduleVO> sale)`|
+||前置条件|启动生成表格的回合|
+||后置条件|导出excel表格|
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|salesservice.show|获得系统中的销售单和销售退货单|
+<br/>
+
+　**accountbookbl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|accountbook.show|语法|`public ArrayList<AccountBookVO> show()`|
+||前置条件|查看所有账簿|
+||后置条件|返回系统中的所有账簿|
+|accountbook.newBuild|语法|`public ResultMessage newBuild(AccountBookVO accountBookVO)`|
+||前置条件|启动一个期初建账回合|
+||后置条件|查看是否存在该年账簿，若没有，则新增，返回新增验证信息|
+|accountbook.choseByYear|语法|`public AccountBookVO choseByYear(int date)`|
+||前置条件|查看特定年份账户，date输入符合规则|
+||后置条件|返回date对应的账簿|
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|commodityblservice.show|得到当前系统内商品的List|
+|accountblservice.show|得到当前系统内银行账户的List|
+|memberblservice.show|得到当前系统内会员信息的List|
+<br/>
+
+
+
+##**5.4数据层的分解**
+<img src = "../img/数据层模块的描述.png">
+<center>数据层模块的描述</center>
+
+###<center>5.4.1数据层模块的职责</center>
+
+<table><tbody>
+       <tr>
+       <th>模块</th>
+       <th>职责</th>
+</tr>
+       <tr>
+       <th>SalesDataService</th>
+       <th>持久化数据库的接口，提供集体载入，集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>SalesDataServiceTxtFileImpl</th>
+       <th>持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>SalesDataServiceSerilizableFileImpl</th>
+       <th>基于序列化文件的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>SalesDataServiceMySqlImpl</th>
+       <th>基于MySql数据库的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+
+<tr>
+       <th>UserDataService</th>
+       <th>持久化数据库的接口，提供集体载入，集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>UserDataServiceTxtFileImpl</th>
+       <th>基于Txt文件的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>UserDataServiceSerilizableFileImpl</th>
+       <th>基于序列化文件的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>UserDataServiceMySqlImpl</th>
+       <th>基于MySql数据库的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+
+<tr>
+       <th>CommodityDataService</th>
+       <th>持久化数据库的接口，提供集体载入，集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>CommodityDataServiceTxtFileImpl</th>
+       <th>基于Txt文件的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>CommodityDataServiceSerilizableFileImpl</th>
+       <th>基于序列化文件的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>CommodityDataServiceMySqlImpl</th>
+       <th>基于MySql数据库的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+
+<tr>
+       <th>MemberDataService</th>
+       <th>持久化数据库的接口，提供集体载入，集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>MemberDataServiceTxtFileImpl</th>
+       <th>基于Txt文件的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>MemberDataServiceSerilizableFileImpl</th>
+       <th>基于序列化文件的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>MemberDataServiceMySqlImpl</th>
+       <th>基于MySql数据库的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+
+<tr>
+       <th>AccountDataService</th>
+       <th>持久化数据库的接口，提供集体载入，集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>AccountDataServiceTxtFileImpl</th>
+       <th>基于Txt文件的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>AccountDataServiceSerilizableFileImpl</th>
+       <th>基于MySql数据库的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>AccountDataServiceMySqlImpl</th>
+       <th>基于MySql数据库的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+
+<tr>
+       <th>PromotionDataService</th>
+       <th>持久化数据库的接口，提供集体载入，集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>PromotionDataServiceTxtFileImpl</th>
+       <th>基于MySql数据库的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>PromotionDataServiceSerilizableFileImpl</th>
+       <th>基于MySql数据库的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+ <tr>
+       <th>PromotionDataServiceMySqlImpl</th>
+       <th>基于MySql数据库的持久化数据库的接口，提供集体载入、集体保存、增、删、改、查服务</th>
+</tr>
+</table>
+
+###<center>5.4.2数据层模块的接口规范</center>
+<table><tbody>
+<tr><th colspan ="3"><center>提供的服务（供接口）</center></th></tr>
+
+<tr>
+<th rowspan="3">SalesDataService.find</th>
+<th>语法</th>
+<th><code>public ArrayList<SalesPO> find(String keyword, FindSalesType type) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>按keyword和查找方式进行查找返回相应的SalesPO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">SalesDataService.show</th>
+<th>语法</th>
+<th><code>public ArrayList<SalesPO> show() throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回所有的SalesPO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">SalesDataService.insert</th>
+<th>语法</th>
+<th><code>public ResultMessage insert(SalesPO po) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>同样id的PO在数据库中不存在</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>在数据库中增加一个po记录</th>
+</tr>
+
+<tr>
+<th rowspan="3">SalesDataService.delete</th>
+<th>语法</th>
+<th><code>public ResultMessage delete(String id) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>删除一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">SalesDataService.update</th>
+<th>语法</th>
+<th><code>public void update(SalesPO po) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>更新一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">PurchaseDataService.find</th>
+<th>语法</th>
+<th><code>public ArrayList<PurchasePO> find(String keyword, FindSalesType type) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>按keyword和查找方式进行查找返回相应的PurchasePO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">PurchaseDataService.show</th>
+<th>语法</th>
+<th><code>public ArrayList<PurchasePO> show() throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回所有的PurchasePO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">PurchaseDataService.insert</th>
+<th>语法</th>
+<th><code>public ResultMessage insert(PurchasePO po) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>同样ID的po在数据库中不存在</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>在数据库中增加一个po记录</th>
+</tr>
+
+<tr>
+<th rowspan="3">PurchaseDataService.delete</th>
+<th>语法</th>
+<th><code>public ResultMessage delete(String id) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>删除一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">PurchaseDataService.update</th>
+<th>语法</th>
+<th><code>public void update(PurchasePO po) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>更新一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">PaymentBillDataService.find</th>
+<th>语法</th>
+<th><code>public ArrayList<PaymentBillPO> find(String keyword, FindAccountBillType type) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>按keyword和查找方式进行查找返回相应的PaymentBillPO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">PaymentBillDataService.show</th>
+<th>语法</th>
+<th><code>public ArrayList<PaymentBillPO> show() throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回所有的PaymentBillPO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">PaymentBillDataService.insert</th>
+<th>语法</th>
+<th><code>public ResultMessage insert(PaymentBillPO po) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>同样ID的po在数据库中不存在</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>在数据库中增加一个po记录</th>
+</tr>
+
+<tr>
+<th rowspan="3">PaymentBillDataService.delete</th>
+<th>语法</th>
+<th><code>public ResultMessage delete(String id) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>删除一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">PaymentBillDataService.update</th>
+<th>语法</th>
+<th><code>public void update(PaymentBillPO po) throws RemoteException</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>更新一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">ReceiptBillDataService.find</th>
+<th>语法</th>
+<th><code>public ArrayList<ReceiptBillPO> findReceiptBill(String keyword, FindAccountBillType type)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>按keyword和查找方式进行查找返回相应的ReceiptBillPO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">ReceiptBillDataService.show</th>
+<th>语法</th>
+<th><code>public ArrayList<ReceiptBillPO> showReceiptBill()</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回所有的ReceiptBillPO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">ReceiptBillDataService.insert</th>
+<th>语法</th>
+<th><code>public ResultMessage insertReceiptBill(ReceiptBillPO po)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>同样ID的po在数据库中不存在</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>在数据库中增加一个po记录</th>
+</tr>
+
+<tr>
+<th rowspan="3">ReceiptBillDataService.delete</th>
+<th>语法</th>
+<th><code>public ResultMessage deleteReceiptBill(String id)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>删除一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">ReceiptBillDataService.update</th>
+<th>语法</th>
+<th><code>public ResultMessage updateReceiptBill(ReceiptBillPO po)
+</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>更新一个po</th>
+</tr>
+
+
+<tr>
+<th rowspan="3">ClassificationDataService.find</th>
+<th>语法</th>
+<th><code>public ClassificationVPO findClassification(String name)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>按keyword进行查找返回相应的ClassificationPO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">ClassificationDataService.show</th>
+<th>语法</th>
+<th><code>public ArrayList<ClassificationVPO> show()</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回所有的Classification结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">ClassificationDataService.getRoot</th>
+<th>语法</th>
+<th><code>public ClassificationVPO getRoot()</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回Classification的根结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">ClassificationDataService.insert</th>
+<th>语法</th>
+<th><code>public ResultMessage insertClassification(ClassificationVPO po)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>同样vo的p在数据库中不存在</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>在数据库中增加一个po记录</th>
+</tr>
+
+<tr>
+<th rowspan="3">ClassificationDataService.delete</th>
+<th>语法</th>
+<th><code>public ResultMessage deleteClassification(String id)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>删除一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">ClassificationDataService.update</th>
+<th>语法</th>
+<th><code>public ResultMessage updateClassification(ClassificationVPO po)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>更新一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">InventoryBillDataService.find</th>
+<th>语法</th>
+<th><code>public ArrayList<InventoryBillPO> findInventoryBill(String keyword,FindInventoryBillType type)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>按keyword和查找方式进行查找返回相应的InventoryBillPO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">InventoryBillDataService.show</th>
+<th>语法</th>
+<th><code>public ArrayList<InventoryBillPO> showInventoryBill()</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回所有的InventoryBillPO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">InventoryBillDataService.insert</th>
+<th>语法</th>
+<th><code>public ResultMessage insertInventoryBill(InventoryBillPO inventoryBillPO)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>同样ID的po在数据库中不存在</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>在数据库中增加一个po记录</th>
+</tr>
+
+<tr>
+<th rowspan="3">InventoryBillDataService.delete</th>
+<th>语法</th>
+<th><code>public ResultMessage deleteInventoryBill(String id)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>删除一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">InventoryBillDataService.update</th>
+<th>语法</th>
+<th><code>public ResultMessage updateInventoryBill(InventoryBillPO inventoryBillPO)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>更新一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">CommodityDataService.find</th>
+<th>语法</th>
+<th><code>public ArrayList<CommodityPO> findCommodity(String keywords, FindCommodityType type)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>按keyword和查找方式进行查找返回相应的CommodityPO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">CommodityDataService.show</th>
+<th>语法</th>
+<th><code>public ArrayList<CommodityPO> showCommodity()</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回所有的CommodityPO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">CommodityDataService.insert</th>
+<th>语法</th>
+<th><code>public ResultMessage insertCommodity(CommodityPO po)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>同样ID的PO在数据库中不存在</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>在数据库中增加一个po记录</th>
+</tr>
+
+<tr>
+<th rowspan="3">CommodityDataService.delete</th>
+<th>语法</th>
+<th><code>public ResultMessage deleteCommodity(String id)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>删除一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">CommodityDataService.update</th>
+<th>语法</th>
+<th><code>public ResultMessage updateCommodity(CommodityPO po)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>更新一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">UserDataService.find</th>
+<th>语法</th>
+<th><code>public ArrayList<UserPO> findUser(String info, FindUserType type)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>按info和type进行查找返回相应的UserPO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">UserDataService.insert</th>
+<th>语法</th>
+<th><code>public ResultMessage insertUser(UserPO po)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>同样ID的po在库中不存在</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>在数据库中增加一个po记录</th>
+</tr>
+
+<tr>
+<th rowspan="3">UserDataService.delete</th>
+<th>语法</th>
+<th><code>public ResultMessage deleteUser(String ID)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>删除一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">UserDataService.update</th>
+<th>语法</th>
+<th><code>public ResultMessage updateUser(UserPO po)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>更新一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">UserDataService.show</th>
+<th>语法</th>
+<th><code>public ArrayList<UserPO> showUser()</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回数据库中所有的用户数据po对象</th>
+</tr>
+
+<tr>
+<th rowspan="3">UserDataService.login</th>
+<th>语法</th>
+<th><code>public boolean login(String id, String password)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>用户登录</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回登录验证信息</th>
+</tr>
+
+<tr>
+<th rowspan="3">MemberDataService.find</th>
+<th>语法</th>
+<th><code>public ArrayList<MemberPO> find(String keyword, FindMemberType type) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>按keyword和查找方式进行查找返回相应的MemberPO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">MemberDataService.insert</th>
+<th>语法</th>
+<th><code>public ResultMessage insert(SalesPO po) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>同样ID的p在数据库中不存在</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>在数据库中增加一个po记录</th>
+</tr>
+
+<tr>
+<th rowspan="3">MemberDataService.delete</th>
+<th>语法</th>
+<th><code>public void delete(String id) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>删除一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">MemberDataService.update</th>
+<th>语法</th>
+<th><code>public ResultMessage update(String id) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>更新一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">AccountDataService.find</th>
+<th>语法</th>
+<th><code>public ArrayList<AccountPO> findAccount(String keywords, FindAccountType type)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>按keyword和查找方式进行查找返回相应的AccountPO结果</th>
+</tr>
+
+<th rowspan="3">AccountDataService.show</th>
+<th>语法</th>
+<th><code>public ArrayList<AccountPO> showAccount()</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回所有的AccountPO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">AccountDataService.insert</th>
+<th>语法</th>
+<th><code>public ResultMessage insertAccount(AccountPO po)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>同样ID的p在数据库中不存在</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>在数据库中增加一个po记录</th>
+</tr>
+
+<tr>
+<th rowspan="3">AccountDataService.delete</th>
+<th>语法</th>
+<th><code>public ResultMessage deleteAccount(String id)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>删除一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">AccountDataService.update</th>
+<th>语法</th>
+<th><code>public ResultMessage updateAccount(AccountPO po)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>更新一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">PromotionDataService.find</th>
+<th>语法</th>
+<th><code>public ArrayList<PromotionPO> find(String keyword, FinsPromotionType type) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>按keyword和查找方式进行查找返回相应的PromotionPO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">PromotionDataService.show</th>
+<th>语法</th>
+<th><code>public ArrayList<PromotionPO> show() throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回所有的PromotionPO结果</th>
+</tr>
+
+<tr>
+<th rowspan="3">PromotionDataService.insert</th>
+<th>语法</th>
+<th><code>public ResultMessage insert(PromotionPO po) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>同样ID的po在数据库中不存在</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>在数据库中增加一个po记录</th>
+</tr>
+
+<tr>
+<th rowspan="3">PromotionDataService.delete</th>
+<th>语法</th>
+<th><code>public ResultMessage delete(String id) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>删除一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">PromotionDataService.update</th>
+<th>语法</th>
+<th><code>public ResultMessage update(PromotionPO po) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>在数据库中存在同样ID的po</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>更新一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">MessageDataService.save</th>
+<th>语法</th>
+<th><code>public ResultMessage save(MessagePO po) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>保存一个po</th>
+</tr>
+
+<tr>
+<th rowspan="3">MessageDataService.getMessage</th>
+<th>语法</th>
+<th><code>public ArrayList<MessagePO> getMessage(UserPO po) throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>数据库中有数据</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回所有该用户的单据审批信息</th>
+</tr>
+
+<tr>
+<th rowspan="3">MessageDataService.getMessageID</th>
+<th>语法</th>
+<th><code>public String getMessageID() throws RemoteException;</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>无</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>获取自动生成的递增ID</th>
+</tr>
+
+</table>
+
+
+# 6.信息视角
+  **6.1 数据持久化对象**
+
+  系统的PO类就是对应的相关的实体类，如下所示
+  *	UserPO 包括用户名、密码、身份属性
+  *	MemberVO 包括编号、分类（进货商、销售商）、级别（五级，一级普通用户，五级VIP客户）、姓名、电话、地址、邮编、电子邮箱、应收额度、应收、应付、默认业务员
+  * SalesPO 保存销售时候数据的类，包括时间、状态、单据编号（XSD-yyyyMMdd-xxxxx），客户（仅显示销售商），业务员（和这个客户打交道的公司员工，可以设置一个客户的默认业务员），操作员（当前登录系统的用户），仓库，出货商品清单，折让前总额，折让，使用代金卷金额，折让后总额，备注。出货商品清单中要显示商品的编号，名称（从商品选择界面选择），型号，数量（手工输入），单价（默认为商品信息里的销售价，可修改），金额（自动生成），商品备注
+  * AccountPO 包括创建时间、账户名称和金额
+  * PaymentBillPO与ReceiptBillPO 包括时间、状态，单据编号（SKD-yyyyMMdd-xxxxx），客户（同时包含供应商和销售商），操作员（当前登录用户），转账列表，总额汇总。转账列表中的一项包含：银行账户，转账金额，备注
+  * CommodityPO 包括编号、名称、型号、库存数量、进价、零售价、最近进价、最近零售价
+  * PurchasePO 保存进货时候数据的类，包括时间、状态、单据编号（格式为：JHD-yyyyMMdd-xxxxx，后五位每天从1开始编号，所以一天最多可以生成99999条单子），供应商，仓库，操作员，入库商品列表，备注，总额合计。其中入库商品列表包含的信息有：商品编号，名称（从商品选择界面进行选择），型号，数量（手动输入），单价（默认为商品信息中的进价），金额，备注（手动输入）。没有下划线的部分是自动计算并填充进去的
+  * PromotionPO 保存促销的开始时间和结束时间等
+
+  **6.2 Txt持久化格式**
+
+  Txt数据保持格式以Commodity.txt为例。。每行分别对应商品编号、名称、价格、数量。中间用“:” 分隔开。如下所示：
+  * 123:白炽灯:10:32
+  * 456:节能灯:20:22
+
+  **6.3 数据库表**
+
+  数据库表包括User表、Commodity表、Member表、Sales表、Purchase表、Bills表、Account表等。
+
+  **6.4 文件格式**
+
+  统一用*.ser格式，比如client.ser

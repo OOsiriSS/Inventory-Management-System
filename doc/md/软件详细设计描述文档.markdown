@@ -1,0 +1,2519 @@
+# 企业进销存系统 SIMS(Sales Invoicing Management System)
+
+# 软件详细设计描述文档
+
+# 草稿
+
+## plsw软工二小组
+
+## 2017-10-30
+
+
+## 目录
+
+### 1.引言
+
+    **1.1　编制目的**
+    **1.2　词汇表**
+    **1.3　参考资料**
+
+### 2.产品概述
+
+### 3.体系结构设计概述
+
+### 4.结构视角
+
+    **4.1　业务逻辑层的分解**
+
+## 更新历史
+
+| **修改人员** | **日期**     | **变更原因** | **版本号** |
+| -------- | ---------- | -------- | ------- |
+| 王灿灿 | 2017-10-30 | 添加accountbl模块 | v1.1.1 |
+| 潘星宇 | 2017-11-01 | 添加commoditybl模块 | v1.1.2 |
+| 李杰 | 2017-11-02 | 添加salesbl模块、memberbl模块 | v1.1.3 |
+| 潘星宇 | 2017-11-05 | 添加userbl模块 | v1.1.4 |
+| 李杰 | 2017-11-07 | 添加purchase模块 | v1.1.5 |
+| 孙嘉杰 | 2017-11-08 | 添加promotionbl模块 | v1.1.6 |
+| 潘星宇 | 2017-11-08 | 添加billbl模块、mainui模块 | v1.1.7 |
+| 潘星宇 | 2017-11-08 | 修改commoditybl模块 | v1.1.8 |
+| 王灿灿 | 2017-11-10 | 添加mfdoc模块，setupaccount模块 | v1.1.9 |
+| 潘星宇 | 2017-11-12 | 修改commoditybl模块 | v1.2.1 |
+| 潘星宇 | 2017-11-12 | 添加commoditydata模块、userdata模块、userui模块、commodityui模块 | v1.2.2 |
+| 孙嘉杰 | 2017-11-12 | 修改promotionbl模块 | v1.2.3 |
+| 潘星宇 | 2017-11-13 | 添加billdata模块、billui模块 | v1.2.4 |
+| 潘星宇 | 2017-11-13 | 修改commoditydata模块、userdata模块 | v1.2.5 |
+| 王灿灿 | 2017-11-14| 添加accountdata模块、mfdocdata模块、setupaccountdata模块 | v1.2.6 |
+| 王灿灿 | 2017-11-14| 添加accountui模块、mfdocui模块、setupaccountui模块 | v1.2.7 |
+| 王灿灿 | 2017-11-14| 修改mfdoc模块设计图 | v1.2.8 |
+| 李杰 | 2018-1-08 | 修改Purchase模块、sale模块、member模块 | v1.3 |
+| 孙嘉杰 | 2018-1-10 | 修改Promotionbl模块 | v1.4 |
+| 王灿灿 | 2018-1-13| 修改财务类和库存类模块，修改对应设计图和顺序图| v1.5|
+| 李杰 | 2018-1-13 | 修改进货和销售以及促销与客户管理模块 | v1.6 |
+
+>>>>>>> refs/remotes/origin/master
+
+
+## 1.引言
+<br/>
+　　**1.1　编制目的**
+
+　　本报告详细完成对企业进销存系统的详细设计，达到指导后续软件构造的目的，同时实现和测试人员及用户的沟通。
+
+　　本报告面向开发人员、测试人员及最终用户而编写，是了解系统的导航。
+
+　　**1.2　词汇表**
+
+|词汇名称|词汇含义|备注|
+| --- | --- | --- |
+|SIMS|企业进销存系统|……|
+<br/>
+　　**1.3　参考资料**
+
+## 2.产品概述
+<br/>
+　　参考企业进销存系统用例文档和企业进销存系统软件需求规格说明文档中对产品的概括描述。
+
+## 3.体系结构设计概述
+<br/>
+　　参考企业进销存系统概要设计文档中对体系结构设计的概述。
+
+## 4.结构视角
+<br/>
+　　**4.1　业务逻辑层的分解**
+
+　　业务逻辑层的开发包图参见软件体系结构文档图。
+
+　　　　4.1.1　accountbl模块
+
+　　　　(1)模块概述
+
+　　　　accountbl模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+　　　　Accountbl模块的职责及接口参见软件体系结构描述文档表。
+
+　　　　(2)整体结构
+
+　　　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加businesslogicservice.accountblservice.AccountBLService接口。业务逻辑层和数据层之间添加dataservice.accountdataservice.AccountDataService接口。为了隔离业务逻辑职责和逻辑控制职责，我们增加了AccountController，这样AccountController将会对账户管理的业务逻辑处理委托给Account对象。AccountPO是作为账户记录的持久化对象被添加到设计模型中去的。
+
+　　　　accountbl模块的设计如图所示。
+
+<img src="../img/软件详细设计图/accountbl模块设计图.png">
+
+　　accountbl模块各个类的职责如下所示
+
+|模块|职责|
+| --- | --- |
+|AccountController|负责实现账户管理界面所需要的服务|
+|AccountBL|账户管理的领域模型对象|
+
+　　　　(3)模块内部类的接口规范
+
+　　　AccountController的接口规范
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|**AccountController.find**|语法|`public AccoutPO find(String message,FindAccountType findType)`|
+||前置条件|已创建一个AccountBL对象，并且输入的message符合规则|
+||后置条件|调用AccountBL领域对象的check方法|
+|**AccountController.add**|语法|`public ResultMessage add(AccountVO accountVO)`|
+||前置条件|已创建一个AccountBL对象，并且输入符合规则|
+||后置条|调用AccountBL领域对象的newBuild方法|
+|**AccountController.delete**|语法|`public ResultMessage delete(AccountVO accountVO)`|
+||前置条件|已创建一个AccountBL对象，并且输入符合规则|
+||后置条件|调用AccountBL领域对象的delete方法|
+|**AccountController.modify**|语法|`public ResultMessage modify(AccountVO accountVO)`|
+||前置条件|已创建一个AccountBL对象，并且输入符合规则|
+||后置条件|调用AccountBL领域对象的modify方法|　
+|**Account.judgeLegal**|语法|`public ResultMessage judgeLegal(AccountVO accountVO)`|
+||前置条件|已创建一个AccountBL对象|
+||后置条件|调用AccountBL领域对象的judgeLegal方法|
+|**Account.show**|语法|`public ArrayList<AccountVO> getAccountList()`|
+||前置条件|已创建一个AccountBL对象|
+||后置条件|调用AccountBL领域对象的show方法|
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|AccountBL.find(string message, FindAccountType findType)|根据查找内容查找账户|
+|AccountBL.add(AccountVO accountVO)|添加账户|
+|AccountBL.delete(AccountVO accountVO)|删除账户|
+|AccountBL.modify(AccountVO accountVO)|修改账户|
+|AccountBL.judgeLegal(AccountVO accountVO)|判断银行账户数据是否合法|
+|AccountBL.show()|得到所有的银行账户信息|
+
+<br/>
+　**Accountbl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|**Account.find**|语法|`public ArrayList<AccountVO> find(String message, FindAccountType findType)`|
+||前置条件|关键词message符合输入规则|
+||后置条件|返回符合关键词的账户列表|
+|**Account.add**|语法|`public ResultMessage add(AccountVO accountVO)`|
+||前置条件|账户信息符合规则|
+||后置条件|查找该账户是否存在，若不存在则新增，返回新增验证的结果|
+|**Account.delete**|语法|`public void delete(AccountVO accountVO)`|
+||前置条件|账户信息符合规则|
+||后置条件|查找该账户是否存在，若存在则删除|
+|**Account.modify**|语法|`public ResultMessage modify(AccountVO accountVO)`|
+||前置条件|账户信息符合规则|
+||后置条件|查找该账户是否存在，若存在则更新数据，返回更新验证的结果|
+|**Account.judgeLegal**|语法|`public ResultMessage judgeLegal(AccountVO accountVO)`|
+||前置条件|需要对账户进行新增修改操作|
+||后置条件|返回判断验证的结果|
+|**Account.show**|语法|`public ArrayList<AccountVO> getAccountList()`|
+||前置条件|启动一个账户管理回合|
+||后置条件|返回系统中所有的账户的List|
+
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|AccountDataService.find(String keywords, FindAccountType type)|根据keywords查找单一持久化对象|
+|AccountDataService.insert|新建单一持久化对象|
+|AccountDataService.delete|删除单一持久化对象|
+|AccountDataService.update|更新单一持久化对象|
+|AccountDataService.show|返回数据库中所有持久化对象|
+|AccountDataService.updateMoney(String id, double money)|更新id对应账户的银行账户信息|
+<br/>
+
+
+
+　　　　(4)业务逻辑层的动态模型
+
+　　　　以下四个图分别表明了企业进销存系统中，对银行账户进行增删改查的逻辑处理的相关对象之间的协作
+
+<img src="../img/软件详细设计图/account_add顺序图.png">
+
+<img src="../img/软件详细设计图/account_delete顺序图.png">
+
+<img src="../img/软件详细设计图/account_modify顺序图.png">
+
+<img src="../img/软件详细设计图/account_find顺序图.png">
+
+
+ 　　　　**4.1.2　mfdocbl模块**
+
+　　　　(1)模块概述
+
+　　　　mfdocbl模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+　　　　MFDocbl模块的职责及接口参见软件体系结构描述文档表。
+
+　　　　(2)整体结构
+
+　　　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加businesslogicservice.paymentbillblservice.PaymentBillBLService接口和businesslogicservice.receiptbillblservice.ReceiptBillBLService。业务逻辑层和数据层之间添加dataservice.paymentbilldataservice.PaymentBillDataService接口和dataservice.receiptbilldataservice.ReceiptBillDataService。为了隔离业务逻辑职责和逻辑控制职责，我们增加了PaymentBillController和ReceiptBillController，这样将会对财务类单据管理的业务逻辑处理委托给PaymentBill和ReceiptBill对象。
+
+　　　　mfdocbl模块(财务类单据模块)的设计如图所示。
+
+<img src="../img/软件详细设计图/skdbl模块设计图.png">
+paymentbill的设计图类似
+
+　　mfdocbl模块各个类的职责如下所示
+
+|模块|职责|
+| --- | --- |
+|ReceiptBillController|负责实现收款单界面所需要的服务|
+|PaymentBillController|负责实现现金费用单界面所需要的服务|
+|ReceiptBillBL|收款单的领域模型对象|
+|PaymentBillBL|现金费用单的领域模型对象|
+
+　　　　(3)模块内部类的接口规范
+
+　　　　PaymentBillController的接口规范(ReceiptBillController类似)
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|PaymentBillController.getID|语法|`public String getId()`|
+||前置条件|已经创建一个PaymentBillBL对象|
+||后置条件|调用PaymentBillBL领域对象的getID方法|
+|PaymentBillController.save|语法|`public ResultMessage save(PaymentBillVO paymentBillVO)`|
+||前置条件|已经创建一个PaymentBillBL对象|
+||后置条件|调用PaymentBillBL领域对象的save方法|
+|PaymentBillController.delete|语法|`public ResultMessage delete(PaymentBillVO paymentBillVO)`|
+||前置条件|已经创建一个PaymentBillBL对象|
+||后置条件|调用PaymentBillBL领域对象的delete方法|
+|PaymentBillController.commit|语法|`public ResultMessage commit(PaymentBillVO paymentBillVO)`|
+||前置条件|已经创建一个PaymentBillBL对象|
+||后置条件|调用PaymentBillBL领域对象的commit方法|
+|PaymentBillController.show|语法|`public ArrayList<PaymentBillVO> show()`|
+||前置条件|已经创建一个PaymentBillBL对象|
+||后置条件|调用PaymentBillBL领域对象的show方法|
+|PaymentBillController.find|语法|`public ArrayList<PaymentBillVO> find(String info,FindAccountBillType type)`|
+||前置条件|已经创建一个PaymentBillBL对象|
+||后置条件|调用PaymentBillBL领域对象的find方法|
+|PaymentBillController.getAccountList|语法|`public ArrayList<String> getAccountList();`|
+||前置条件|已经创建一个PaymentBillBL对象|
+||后置条件|调用PaymentBillBL领域对象的getAccountList方法|
+|PaymentBillController.getCustomerList|语法|`public ArrayList<String> getCustomerList()`|
+||前置条件|已经创建一个PaymentBillBL对象|
+||后置条件|调用PaymentBillBL领域对象的getCustomerList方法|
+|PaymentBillController.judgeLegal|语法|`public ResultMessage judgeLegal(String money)`|
+||前置条件|已经创建一个PaymentBillBL对象|
+||后置条件|调用PaymentBillBL领域对象的judgeLegal方法|
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|PaymentBillBL.getID()|得到新建单据的id|
+|PaymentBillBL.find(String info，FindAccountBillType type)|根据查找内容查找单据|
+|PaymentBillBL.save(PaymentBillVO paymentBillVO)|保存单据|
+|PaymentBillBL.delete(PaymentBillVO paymentBillVO)|删除单据|
+|PaymentBillBL.commit(PaymentBillVO paymentBillVO)|提交单据|
+|PaymentBillBL.show()|查看系统中所有付款单单据|
+|PaymentBillBL.getAccountList()|得到系统中银行账户的信息列表|
+|PaymentBillBL.getCustomerList()|得到系统中客户的信息列表|
+|PaymentBillBL.judgeLegal(String money)|判断是否合法|
+<br/>
+　**PaymentBillbl模块的接口规范(ReceiptBillbl类似)**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|PaymentBill.getID|语法|`public String getId()`|
+||前置条件|启动一个新增付款单的回合|
+||后置条件|返回待新增单据的ID|
+|PaymentBill.save|语法|`public ResultMessage save(PaymentBillVO paymentBillVO)`|
+||前置条件|单据信息符合规则|
+||后置条件|查找是否存在该单据，若不存在则新增，存在则更新，返回保存验证的结果|
+|PaymentBill.delete|语法|`public ResultMessage delete(PaymentBillVO paymentBillVO)`|
+||前置条件|单据符合规则|
+||后置条件|查找是否有该单据，若存在则删除，返回删除验证的结果|
+|PaymentBill.commit|语法|`public ResultMessage commit(PaymentBillVO paymentBillVO)`|
+||前置条件|单据信息符合规则|
+||后置条件|查找是否有该单据，若存在则修改单据状态为已提交，返回提交验证的结果|
+|PaymentBill.show|语法|`public ArrayList<PaymentBillVO> show()`|
+||前置条件|启动一个查看过往单据的回合|
+||后置条件|返回系统中所有的付款单的list|
+|PaymentBill.find|语法|`public ArrayList<PaymentBillVO> find(String info,FindAccountBillType type)`|
+||前置条件|info符合规则|
+||后置条件|返回符合info的库存类单据的列表|
+|PaymentBill.getAccountList|语法|`public ArrayList<String> getAccountList();`|
+||前置条件|启动一个新建付款单的回合|
+||后置条件|返回系统中银行账户名的列表|
+|PaymentBill.getCustomerList|语法|`public ArrayList<String> getCustomerList()`|
+||前置条件|启动一个新建付款单的回合|
+||后置条件|返回系统中客户名的列表|
+|PaymentBill.judgeLegal|语法|`public ResultMessage judgeLegal(String money)`|
+||前置条件|需要对付款单进行金额的新增修改操作|
+||后置条件|返回判断验证的结果|
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|PaymentBillDataService.insert|插入单一持久化对象|
+|PaymentBillDataService.update|更新打印持久化对象|
+|PaymentBillDataService.delete|删除单一持久化对象|
+|PaymentBillDataService.find(String keyword,FindInventoryBillType type)|根据keword查找多个持久化对象|
+|PaymentBillDataService.show|返回数据库中所有持久化对象|
+<br/>
+　　　　**4.1.3　accountbookbl模块**
+
+　　　　(1)模块概述
+
+　　　　accountbookbl模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+　　　　accountbookbl模块的职责及接口参见软件体系结构描述文档表。
+
+　　　　(2)整体结构
+
+　　　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加businesslogicservice.accountbookblservice.AccountBookService接口。业务逻辑层和数据层之间添加dataservice.accountbookdataservice.AccountBookDataService接口。为了隔离业务逻辑职责和逻辑控制职责，我们增加了AccountBookController，这样AccountBookController将会对期初建账的业务逻辑处理委托给AccountBook对象。AccountBookPO是作为期初建账后账簿的持久化对象被添加到设计模型中去的。
+
+　　　　accountbookbl模块的设计如图所示。
+
+<img src="../img/软件详细设计图/setupaccount模块设计图.png">
+
+　　accountbookbl模块各个类的职责如下所示
+
+|模块|职责|
+| --- | --- |
+|AccountBookController|负责实现期初建账界面所需要的服务|
+|AccountBookBL|期初建账的领域模型对象|
+
+　　　　(3)模块内部类的接口规范
+
+　　　AccountBookController的接口规范
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|**AccountBookController.newBuild**|语法|`public ResultMessage newBuild(AccountBookVO accountBookVO)`|
+||前置条件|已创建一个SetUpAccountBL对象，并且输入符合规则|
+||后置条件|调用AccountBL领域对象的newBuild方法|
+|**AccountBookController.choseByYear**|语法|`public AccountBookVO choseByYear(int date)`|
+||前置条件|已经创建一个SetUpAccountBL对象|
+||后置条件|调用SetUpAccountBL领域对象的find方法|
+|**AccountBookController.show**|语法|`public ArrayList<AccountBookVO> show()`|
+||前置条件|已经创建一个SetUpAccountBL对象|
+||后置条件|调用SetUpAccountBL领域对象的show方法|
+<br/>　
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|AccountBookBL.newBuild(AccountBookVO AccountBookVO)|添加账簿|
+|AccountBookBL.show()|查找所有的账簿|
+|AccountBookBL.choseByYear(int date)|查找特定年份的账簿|
+<br/>
+　**accountbookbl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|accountbook.show|语法|`public ArrayList<AccountBookVO> show()`|
+||前置条件|查看所有账簿|
+||后置条件|返回系统中的所有账簿|
+|accountbook.newBuild|语法|`public ResultMessage newBuild(AccountBookVO accountBookVO)`|
+||前置条件|启动一个期初建账回合|
+||后置条件|查看是否存在该年账簿，若没有，则新增，返回新增验证信息|
+|accountbook.choseByYear|语法|`public AccountBookVO choseByYear(int date)`|
+||前置条件|查看特定年份账户，date输入符合规则|
+||后置条件|返回date对应的账簿|
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|commodityblservice.show|得到当前系统内商品的List|
+|accountblservice.show|得到当前系统内银行账户的List|
+|memberblservice.show|得到当前系统内会员信息的List|
+<br/>
+
+
+　　　　(4)业务逻辑层的动态模型
+
+　　　　以下三个图分别表明了企业进销存系统中，对账簿进行增查的逻辑处理的相关对象之间的协作
+
+<img src="../img/软件详细设计图/setupaccount_newBuild顺序图.png">
+
+<img src="../img/软件详细设计图/setupaccount_find顺序图.png">
+　　　　4.1.4 commoditybl 模块
+
+　　　　(1)模块概述
+
+　　commoditybl模块承担的需求参见需求规格说明文档功能需求及相关非功能需求。
+
+　　commoditybl模块的职责及接口参见软件系统结构描述文档表
+
+　　　　 (2)整体结构
+
+　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加bussinesslogicservice.commodityblservice.CommodityBLService接口和bussinesslogicservice.commodityblservice.ClassificationBLService接口。业务逻辑层和数据层之间添加dataservice.commoditydataservice.CommodityDataService接口和dataservice.commoditydataservice.ClassificationDataService接口。为了隔离业务逻辑职责和逻辑控制职责，我们增加了CommodityController和ClassificationController这样CommodityController会将对商品和商品分类管理的业务逻辑处理分别委托给Commodity对象和classification对象。CommodityPO和ClassificationPO是作为商品及其分类记录的持久化对象添加到设计模型中去的。<br>
+<img src="../img/软件详细设计图/commodity模块各个类的设计.png"><br>
+<center>**commodity模块各个类的设计**</center>
+
+|模块|职责|
+| ---| --- |
+|CommodityController|负责实现商品界面所需要的服务|
+|ClassificationController|负责实现商品分类管理界面所需要的服务|
+|Commodity|商品的领域模型对象，拥有一个商品所持有的数量、售价等信息，可以帮助完成商品界面所需要的服务|
+|Classification|商品分类的领域模型对象，拥有一个商品分类所持有的下属商品等信息，可以帮助完成商品界面所需要的服务|
+
+（3）模块内部类的接口规范
+
+　**Commoditycontroller模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|Commoditycontroller.getID|语法|`public String getID()`|
+||前置条件|已经创建一个commoditybl对象|
+||后置条件|调用commoditybl领域对象的getID()方法|
+|Commoditycontroller.insert|语法|`public ResultMessage insert(CommodityVO vo)`
+||前置条件|已经创建一个commoditybl对象|
+||后置条件|调用commoditybl领域对象的insert()方法|
+|Commoditycontroller.delete|语法|`public void delete(CommodityVO vo)`|
+||前置条件|已经创建一个commoditybl对象|
+||后置条件|调用commoditybl领域对象的delete()方法|
+|Commoditycontroller.update|语法|`public ResultMessage update(CommodityVO vo)`|
+||前置条件|已经创建一个commoditybl对象|
+||后置条件|调用commoditybl领域对象的update()方法|
+|Commoditycontroller.find|语法|`public ArrayList<CommodityVO> find(String info,FindCommodityType properties)`|
+||前置条件|已经创建一个commoditybl对象|
+||后置条件|调用commoditybl领域对象的find()方法|
+|Commoditycontroller.show|语法|`public ArrayList<CommodityVO> show()`|
+||前置条件|已经创建一个commoditybl对象|
+||后置条件|调用commoditybl领域对象的show()方法|
+|Commoditycontroller.getIDandName|语法|`public ArrayList<String> getIDandName()`|
+||前置条件|已经创建一个commoditybl对象|
+||后置条件|调用commoditybl领域对象的getIDandName()方法|
+|Commoditycontroller.getAllChildrenClass|语法|`public ArrayList<String> getAllChildrenClass()`|
+||前置条件|已经创建一个commoditybl对象|
+||后置条件|调用commoditybl领域对象的getAllChildrenClass()方法|
+|Commoditycontroller.check|语法|`public ArrayList<CommodityCheckVO> check(LocalDate start,LocalDate end)`|
+||前置条件|已经创建一个commoditybl对象|
+||后置条件|调用commoditybl领域对象的check()方法|
+|Commoditycontroller.stock|语法|`public ArrayList<CommodityStockVO> stock()`|
+||前置条件|已经创建一个commoditybl对象|
+||后置条件|调用commoditybl领域对象的stock()方法|
+|Commoditycontroller.exportReport|语法|`public void exportReport(ArrayList<CommodityStockVO>`|
+||前置条件|已经创建一个commoditybl对象|
+||后置条件|调用commoditybl领域对象的exportReport()方法|
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|CommodityBL.getID()|得到新增商品的id|
+|CommodityBL.insert(CommodityVO vo)|插入商品|
+|CommodityBL.delelte(CommodityVO vo)|删除商品|
+|CommodityBL.update(CommodityVO vo)|更新商品|
+|CommodityBL.find(String info,FindCommodityType properties)|根据查找内容查找商品|
+|CommodityBL.show()|查看系统中所有商品|
+|CommodityBL.getIDandName()|查看系统中所有商品的id and name|
+|CommodityBL.getAllChildrenandClass()|查看系统中所有分类下是商品的分类和分类子类为空的分类|
+|CommodityBL.check()|库存查看|
+|CommodityBL.stock()|库存盘点|
+|CommodityBL.exportReport|导出excel表格|
+
+
+<br/>
+
+　**Commoditybl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|Commodity.getID|语法|`public String getID()`|
+||前置条件|启动一个新增商品的回合|
+||后置条件|返回待新增商品的id|
+|Commodity.insert|语法|`public ResultMessage insert(CommodityVO vo)`
+||前置条件|商品信息符合规则|
+||后置条件|查找是否有该商品，若不存在则插入，返回插入验证的结果|
+|Commodity.delete|语法|`public void delete(CommodityVO vo)`|
+||前置条件|商品信息符合规则|
+||后置条件|查找是否有该商品，若存在则删除|
+|Commodity.update|语法|`public ResultMessage update(CommodityVO vo)`|
+||前置条件|商品信息符合规则|
+||后置条件|查找是否有该商品，若存在则更新商品信息，返回更新验证的结果|
+|Commodity.find|语法|`public ArrayList<CommodityVO> find(String info,FindCommodityType properties)`|
+||前置条件|关键词Info输入符合规则|
+||后置条件|返回符合关键词的商品列表|
+|Commodity.show|语法|`public ArrayList<CommodityVO> show()`|
+||前置条件|启动一个库存查看回合|
+||后置条件|返回所有的商品列表|
+|Commodity.getIDandName|语法|`public ArrayList<String> getIDandName()`|
+||前置条件|需要查找当前系统内的商品|
+||后置条件|返回所有商品的IDandName|
+|Commodity.getAllChildrenClass|语法|`public ArrayList<String> getAllChildrenClass()`|
+||前置条件|需要查找当前系统内的商品|
+||后置条件|返回所有分类下是商品的分类和分类子类为空的分类|
+|Commodity.check|语法|`public ArrayList<CommodityCheckVO> check(LocalDate start,LocalDate end)`|
+||前置条件|启动一个库存查看回合，得到起止日期|
+||后置条件|根据起止日期返回库存查看List|
+|Commodity.stock|语法|`public ArrayList<CommodityStockVO> stock()`|
+||前置条件|启动一个库存盘点回合|
+||后置条件|返回当天的库存快照List|
+|Commodity.exportReport|语法|`public void exportReport(ArrayList<CommodityStockVO>`|
+||前置条件|得到当天的库存快照List|
+||后置条件|导出excel表格|
+
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|CommodityDataService.insert(CommodityVO vo)|插入单一持久化对象|
+|CommodityDataService.delelte(String id)|删除单一持久化对象|
+|CommodityDataService.update(CommodityVO vo)|更新单一持久化对象|
+|CommodityDataService.find(String keywords,FindCommodityType type)|根据keywords查找多个持久化对象|
+|CommodityDataService.show()|返回数据库中所有持久化对象|
+<br/>
+
+　**classificationController模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|classificationController.getID|语法|`public String getID()`|
+||前置条件|已经创建一个classificationbl领域对象|
+||后置条件|调用classificationbl领域对象的getID()方法|
+|classificationController.insert|语法|`public ResultMessage insert(ClassificationVPO vpo)`|
+||前置条件|已经创建一个classificationbl领域对象|
+||后置条件|调用classificationbl领域对象的insert()方法|
+|classificationController.delete|语法|`public void delete(ClassificationVPO vpo)`|
+||前置条件|已经创建一个classificationbl领域对象|
+||后置条件|调用classificationbl领域对象的delete()方法|
+|classificationController.update|语法|`public ResultMessage update(ClassificationVPO vpo)`|
+||前置条件|已经创建一个classificationbl领域对象|
+||后置条件|调用classificationbl领域对象的update()方法|
+|classificationController.showName|语法|`public ArrayList<String> showName()`|
+||前置条件|已经创建一个classificationbl领域对象|
+||后置条件|调用classificationbl领域对象的showName()方法|
+|classificationController.getClass|语法|`public ClassificationVPO getClass(String name)`|
+||前置条件|已经创建一个classificationbl领域对象|
+||后置条件|调用classificationbl领域对象的getClass()方法|
+|classificationController.getRoot|语法|`public ClassificationVPO getRoot()`|
+||前置条件|已经创建一个classificationbl领域对象|
+||后置条件|调用classificationbl领域对象的getRoot()方法|
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|ClassificationBL.insert(ClassficationVPO vpo)|插入分类|
+|ClassificationBL.update(ClassficationVPO vpo)|更新分类|
+|ClassificationBL.delete(ClassficationVPO vpo)|删除分类|
+|ClassificationBL.getRoot()|返回数据库中根节点持久化对象|
+|ClassificationBL.showName()|返回系统中所有分类的名称|
+|ClassificationBL.getClass(String name)|返回|
+|ClassificationBL.getId()|返回待新增分类的Id|
+
+<br/>
+
+　**classificationbl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|Classification.getID|语法|`public String getID()`|
+||前置条件|启动一个新增分类的回合|
+||后置条件|返回待新增分类的ID|
+|Classification.insert|语法|`public ResultMessage insert(ClassificationVPO vpo)`|
+||前置条件|分类信息符合规则|
+||后置条件|查找是否存在该分类，若不存在则插入，返回插入验证的结果|
+|Classification.delete|语法|`public void delete(ClassificationVPO vpo)`|
+||前置条件|分类信息符合规则|
+||后置条件|查找是否有该商品，若存在则删除|
+|Classification.update|语法|`public ResultMessage update(ClassificationVPO vpo)`|
+||前置条件|分类信息符合规则|
+||后置条件|查找是否有该商品，若存在则更新，返回更新验证的结果|
+|Classification.showName|语法|`public ArrayList<String> showName()`|
+||前置条件|需要查找当前系统内所有的分类|
+||后置条件|返回所有分类的name|
+|Classification.getClass|语法|`public ClassificationVPO getClass(String name)`|
+||前置条件|name符合规则|
+||后置条件|返回根据name找到的分类|
+|Classification.getRoot|语法|`public ClassificationVPO getRoot()`|
+||前置条件|启动一个商品分类管理的回合|
+||后置条件|返回商品分类的根节点|
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|ClassificationDataService.insert()|插入单一持久化对象|
+|ClassificationDataService.update|更新打印持久化对象|
+|ClassificationDataService.delete|删除单一持久化对象|
+|ClassificationDataService.getRoot|返回数据库中根节点持久化对象|
+|ClassificationDataService.find(String name)|根据name查找单一持久化对象|
+|ClassificationDataService.show|返回数据库中所有持久化对象|
+|ClassificationDataService.getId|返回待新增分类的Id|
+<br/>
+
+
+（4）业务逻辑层的动态模型
+该图表明了SIMS系统中，当用户点击输入新增添的商品之后，商品业务逻辑处理相关对象之间的协作<br>
+<img src="../img/软件详细设计图/添加商品的顺序图.png"><br>
+该图表明了SIMS系统中，当用户点击输入删除的商品之后，商品业务逻辑处理相关对象之间的协作<br>
+<img src="../img/软件详细设计图/删除商品的顺序图.png"><br>
+该图表明了SIMS系统中，当用户点击输入修改的商品之后，商品业务逻辑处理相关对象之间的协作<br>
+<img src="../img/软件详细设计图/修改商品的顺序图.png"><br>
+该图表明了SIMS系统中，当用户点击输入查询商品之后，商品业务逻辑处理相关对象之间的协作<br>
+<img src="../img/软件详细设计图/查询商品的顺序图.png"><br>
+该图表明了SIMS系统中，当用户点击输入新增添的分类之后，商品分类业务逻辑处理相关对象之间的协作<br>
+<img src="../img/软件详细设计图/添加分类的顺序图.png"><br>
+该图表明了SIMS系统中，当用户点击输入删除的分类之后，商品分类业务逻辑处理相关对象之间的协作<br>
+<img src="../img/软件详细设计图/删除分类的顺序图.png"><br>
+该图表明了SIMS系统中，当用户点击输入修改的分类之后，商品分类业务逻辑处理相关对象之间的协作<br>
+<img src="../img/软件详细设计图/修改分类的顺序图.png"><br>
+
+　　　　4.1.5 userbl 模块
+
+　　　　(1)模块概述
+
+　　userbl模块承担的需求参见需求规格说明文档功能需求及相关非功能需求。
+
+　　userbl模块的职责及接口参见软件系统结构描述文档表。
+
+　　　　(2)整体结构<br>
+　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加bussinesslogicservice.userblservice.UserBLService接口。业务逻辑层和数据层之间添加dataservice.userdataservice.UserDataService接口。UserPO是作为商品记录的持久化对象添加到设计模型中去的。<br>
+<img src="../img/软件详细设计图/userbl模块各个类的设计.png"><br>
+<center>**user模块各个类的设计**</center>
+
+|模块|职责|
+| --- | --- |
+|UserController|负责实现用户界面所需要的服务|
+|User|系统用户的领域模型对象，拥有用户数据的姓名和密码，可以解决登录问题|
+
+
+ 　　　　(3)模块内部类的接口规范
+
+　**UserController模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|**UserController.login**|语法|`public boolean login(String id, String passWord)`|
+||前置条件|已经创建一个userbl领域对象|
+||后置条件|调用userbl的login()方法|
+|**UserController.find**|语法|`public ArrayList<UserVO> find(String info,FindUserType properties)`|
+||前置条件|已经创建一个userbl领域对象|
+||后置条件|调用userbl的find()方法|
+|**UserController.insert**|语法|`public ResultMessage insert(UserVO vo)`|
+||前置条件|已经创建一个userbl领域对象|
+||后置条件|调用userbl的insert()方法|
+|**UserController.delete**|语法|`public ResultMessage delete(UserVO vo)`|
+||前置条件|已经创建一个userbl领域对象|
+||后置条件|调用userbl的delete()方法|
+|**UserController.update**|语法|`public ResultMessage update(UserVO vo)`|
+||前置条件|已经创建一个userbl领域对象|
+||后置条件|调用userbl的update()方法|
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|UserBL.login(String id,String password)|根据id和password进行登录|
+|UserBL.insert(User VO)|插入新用户|
+|UserBL.delete(User VO)|删除用户|
+|UserBL.update(User VO)|更新用户|
+|UserBL.find(String info,FindUserType type)|根据info查找多个持久化对象|
+|UserBL.show()|查找系统中所有user的信息|
+<br/>
+
+　**userbl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|**User.login**|语法|`public boolean login(String id, String passWord)`|
+||前置条件|password符合输入规则|
+||后置条件|查找是否存在相应的用户，根据输入的password返回登录验证的bool值|
+|**User.find**|语法|`public ArrayList<UserVO> find(String info,FindUserType properties)`|
+||前置条件|关键词Info输入符合规则|
+||后置条件|返回符合关键词的用户的列表|
+|**User.insert**|语法|`public ResultMessage insert(UserVO vo)`|
+||前置条件|用户信息符合规则|
+||后置条件|查找该用户是否已存在，若不存在则插入，返回插入验证的结果|
+|**User.delete**|语法|`public ResultMessage delete(UserVO vo)`|
+||前置条件|用户信息符合规则|
+||后置条件|查找该用户是否已存在，若存在则删除该用户信息，返回删除验证的结果|
+|**User.update**|语法|`public ResultMessage update(UserVO vo)`|
+||前置条件|用户信息符合规则|
+||后置条件|查找该用户是否已存在，若存在则更新该用户信息，返回更新验证的结果|
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|Userdataservice.login(String id,String password)|根据id和password进行登录|
+|Userdataservice.insert(User PO)|插入单一持久化对象|
+|Userdataservice.delete(User PO)|删除单一持久化对象|
+|Userdataservice.update(User PO)|更新单一持久化对象|
+|Userdataservice.find(String info,FindUserType type)|根据Info查找多个持久化对象|
+|Userdataservice.show()|返回数据库中所有持久化对象|
+<br/>
+
+（4）业务逻辑层的动态模型
+该图表明了SIMS系统中，当用户点击输入新增添的用户之后，商品业务逻辑处理相关对象之间的协作<br>
+<img src="../img/软件详细设计图/添加用户的顺序图.png"><br>
+该图表明了SIMS系统中，当用户点击输入删除的用户之后，商品业务逻辑处理相关对象之间的协作<br>
+<img src="../img/软件详细设计图/删除用户的顺序图.png"><br>
+该图表明了SIMS系统中，当用户点击输入修改的用户之后，商品业务逻辑处理相关对象之间的协作<br>
+<img src="../img/软件详细设计图/修改用户的顺序图.png"><br>
+该图表明了SIMS系统中，当用户点击输入查询用户之后，商品业务逻辑处理相关对象之间的协作<br>
+<img src="../img/软件详细设计图/查询用户的顺序图.png"><br>
+
+
+4.1.6 salesbl 模块<br>
+（1）模块概述<br>
+salesbl模块承担的需求参见需求规格说明文档功能需求及相关非功能需求。<br>
+salesbl模块的职责及接口参见软件系统结构描述文档表<br>
+
+（2）整体结构<br>
+　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加bussinesslogicservice. SaleBLService接口。业务逻辑层和数据层之间添加dataservice. SaleDataService接口。为了隔离业务逻辑职责和逻辑控制职责，我们增加了SaleController，这样SaleController会将对销售的逻辑业务处理委托给Sale对象。SalePO是作为销售单的持久化对象被添加到设计模型中去的。<br>
+
+Salebl模块的设计如图所示<br>
+
+<img src="../img/软件详细设计图/Sales模块.png"><br>
+
+<center>**Sale模块各个类的设计**</center>
+
+| **模块** | **职责** |
+|---------| -----------|
+| SaleController | 负责实现制定销售(退货)界面所需要的服务 |
+| SaleTransition | 负责实现PO与VO的互换 |
+| Sale_Promotion | 负责实现制定销售单时的促销策略的选择 |
+
+
+（3）模块内部类的接口规范<br>
+<center>**SalesController的接口规范**</center>
+<table><tbody>
+<tr>
+<th colspan = "3">提供的服务（供接口）</th>
+</tr>
+<tr>
+<th rowspan="3">SalesController.getSalesID</th>
+<th>语法</th>
+<th>`public String getSalesID()`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Sale领域对象，并且输入符合输入规则</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>调用Sale的方法</th>
+</tr>
+<tr>
+<th rowspan="3">SalesController.getSaleBackID</th>
+<th>语法</th>
+<th>`public String getSaleBackID()`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Sale领域对象</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>调用Sales领域对象的方法</th>
+</tr>
+<tr>
+<th rowspan="3">SalesController.save</th>
+<th>语法</th>
+<th>`public ResultMessage save(SaleVO vo)`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Sale领域对象</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>生成并保存salePO</th>
+</tr>
+<tr>
+<th rowspan="3">SalesController.submit</th>
+<th>语法</th>
+<th>`public ResultMessage submit(SaleVO vo)`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Sale领域对象</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>生成并保存salePO</th>
+</tr>
+<tr>
+<th rowspan="3">SalesController.show</th>
+<th>语法</th>
+<th>`public ArrayList<SaleVO> show()`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Sale领域对象</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回全部的SaleVO</th>
+</tr>
+<tr>
+<th rowspan="3">SalesController.find</th>
+<th>语法</th>
+<th>`public ArrayList<SaleVO> find(String info, FindSalesType type)`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Sale领域对象</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回全部符合条件的SaleVO</th>
+</tr>
+<th rowspan="3">SalesController.delete</th>
+<th>语法</th>
+<th>`public ResultMessage delete()`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Sale领域对象</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>删除数据库里的一个SalePO</th>
+</tr>
+<th rowspan="3">SalesController.isLegal</th>
+<th>语法</th>
+<th>`public ResultMessage isLegal(CommodityItemVO item)`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Sale领域对象</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>判断商品清单的输入是否合法</th>
+</tr>
+<th rowspan="3">SalesController.showPricePacks</th>
+<th>语法</th>
+<th>`public ArrayList<PromotionPricePacksVO> showPricePacks()`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Sale领域对象</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回全部符合条件的特价包</th>
+</tr><th rowspan="3">SalesController.FindTotalPromotion()</th>
+<th>语法</th>
+<th>`public ArrayList<PromotionTotalVO> FindTotalPromotion()`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Sale领域对象</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回全部符合条件的总价包</th>
+</tr><th rowspan="3">SalesController.FindMemberPromotion</th>
+<th>语法</th>
+<th>`public ArrayList<PromotionMemberVO> FindMemberPromotion()`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Sale领域对象</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回全部符合条件的等级促销包</th>
+</tr>
+</table>
+
+<table><tbody>
+<tr>
+<th colspan = "2">需要的服务（需接口）</th>
+</tr>
+<tr>
+<th>服务名</th>
+<th>服务</th>
+</tr>
+<tr>
+<th>SalesDataService.insert</th>
+<th>保存销售单单据信息</th>
+</tr>
+<tr>
+<th>SalesDataService.update</th>
+<th>更新销售单单据信息</th>
+</tr>
+<tr>
+<th>SalesDataService.delete</th>
+<th>删除销售单</th>
+</tr>
+<tr>
+<tr>
+<th>SalesDataService.show</th>
+<th>获取全部的销售单信息</th>
+</tr>
+<tr>
+<th>SalesDataService.find</th>
+<th>获取全部符合条件的销售单信息</th>
+</tr>
+<th>PromotionDataService.show</th>
+<th>三个show方法分别获取三种不同形式的促销包</th>
+</tr>
+<tr>
+<th>PromotionBL.poTOvo</th>
+<th>三个poTOvo方法获取三种不同形式的促销包的PO转换成VO</th>
+</tr>
+<th>SalesTransition.VOtoPO</th>
+<th>将SalePO转换成aleVO</th>
+</tr>
+<tr>
+<th>UseDataService.findUser</th>
+<th>查找用户</th>
+</tr>
+<tr>
+<th>CommodityDataService.findCommodity</th>
+<th>将查找商品</th>
+</tr>
+</table>
+
+
+</table>
+
+（4）业务逻辑层的动态模型<br>
+
+该图展示了进货销售人员想在销售单／销售退货单中添加一个促销策略的时候，销售业务逻辑处理的相关对象之间的协作<br>
+<img src="../img/软件详细设计图/addPromotion.png">
+
+
+该图展示了进货销售人员对一个销售单／销售退货单进行提交审批时，销售业务逻辑处理的相关对象之间的协作<br>
+<img src="../img/软件详细设计图/submitSales.png">
+
+
+该图展示了进货销售人员对一个销售单／销售退货单进行保存草稿时，销售业务逻辑处理的相关对象之间的协作<br>
+<img src="../img/软件详细设计图/saveSales.png">
+
+
+该图所示的状态图描述了Sales对象的生存期间的状态序列、引起转移的事件，以及因状态转移而伴随的动作<br>
+<img src="../img/软件详细设计图/Sales对象状态图.png">
+
+
+ (5)业务逻辑层的设计原理<br>
+利用委托式风格，每个界面需要访问的业务逻辑由各自的控制器委托给不同的领域对象。
+
+4.1.7 memberbl 模块<br>
+（1）模块概述<br>
+memberbl模块承担的需求参见需求规格说明文档功能需求及相关非功能需求。<br>
+memberbl模块的职责及接口参见软件系统结构描述文档表<br>
+
+（2）整体结构<br>
+根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加bussinesslogicservice. MemberBLService接口。业务逻辑层和数据层之间添加dataservice. MemberDataService接口。为了隔离业务逻辑职责和逻辑控制职责，我们增加了MemberController，这样MemberController会将对客户的逻辑业务处理委托给Member对象。MemberPO是作为客户的持久化对象被添加到设计模型中去的<br>
+
+Memberbl模块的设计如图<br>
+
+<img src="../img/软件详细设计图/Member模块各个类的设计.png">
+
+<center>**member模块各个类的设计**</center>
+
+| **模块** | **职责** |
+|---------| -----------|
+| MemberController | 负责实现客户管理界面所需要的服务 |
+| MemberTransition | 负责实现MemberPO与VO的转换 |
+
+
+（3）模块内部类的接口规范<br>
+
+<center>**Member的接口规范**</center>
+<table><tbody>
+<tr>
+<th colspan="3">提供的服务（供接口）</th>
+</tr>
+<tr>
+<th rowspan="3">Member.find</th>
+<th>语法</th>
+<th>`public ResultMessage find(String keyword, FindMemberType type)`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>关键字符合输入条件</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>查询到目标客户</th>
+</tr>
+<tr>
+<th rowspan="3">Member.insert</th>
+<th>语法</th>
+<th>`public ResultMessage insert(MemberVO vo)`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>类型、名字、级别、电话、地址、邮编等符合输入条件</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>成功添加客户，持久化更新客户的数据</th>
+</tr>
+<tr>
+<th rowspan="3">Member.update</th>
+<th>语法</th>
+<th>`public ResultMessage upddte(MemberVO vo)`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>修改的属性符合输入条件</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>客户属性被成功修改，持久化更新客户的数据</th>
+</tr>
+<tr>
+<th rowspan="3">Member.delete</th>
+<th>语法</th>
+<th>`public ResultMessage delete(String id)`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>输入的客户符合输入条件</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>客户被成功删除，持久化更新客户的数据</th>
+</tr>
+<tr>
+<th rowspan="3">Member.getId</th>
+<th>语法</th>
+<th>`public String getId()`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>创建新客户</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>获取自动生成的递增ID</th>
+</tr>
+<tr>
+<th rowspan="3">Member.delete</th>
+<th>语法</th>
+<th>`public ArrayList<String> getIDandName()`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>单据创建</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回所有客户的ID和姓名</th>
+</tr>
+</table>
+<table><tbody>
+
+<table><tbody>
+<tr>
+<th colspan = "2">需要的服务（需接口）</th>
+</tr>
+<tr>
+<th>服务名</th>
+<th>服务</th>
+</tr>
+<tr>
+<th>`MemberDataService.findMember(String keyword, FindMemberType type)`</th>
+<th>根据关键词和寻找方式进行查找所有符合条件的持久化对象</th>
+</tr>
+<tr>
+<th>`MemberDataService.insertMember(MemberPO po)`</th>
+<th>添加单一持久化对象</th>
+</tr>
+<tr>
+<th>`MemberDataService.deleteMember(String ID)`</th>
+<th>删除单一持久化对象</th>
+</tr>
+<tr>
+<th>`MemberDataService.updateMember(MemberPO po)`</th>
+<th>更改单一持久化对象</th>
+</tr>
+<tr>
+<th>`public ArrayList<MemberPO> showMember()`</th>
+<th>返回全部客户</th>
+</tr>
+</table>
+
+（4）业务逻辑层的动态模型<br>
+
+该图展示了当进货销售人员想要添加一个客户的时候，客户管理业务逻辑处理的相关对象之间的协作<br>
+<img src="../img/软件详细设计图/addMember.png">
+
+
+该图展示了当进货销售人员想要删除一个客户的时候，客户管理业务逻辑处理的相关对象之间的协作<br>
+<img src="../img/软件详细设计图/deleteMember.png">
+
+
+该图所示的状态图描述了Member对象的生存期间的状态序列、引起转移的事件，以及因状态转移而伴随的动作。
+<img src="../img/软件详细设计图/Member对象状态图.png">
+
+
+ (5)业务逻辑层的设计原理<br>
+利用委托式风格，每个界面需要访问的业务逻辑由各自的控制器委托给不同的领域对象。
+
+4.1.8 purchasebl 模块<br>
+（1）模块概述<br>
+purchasebl模块承担的需求参见需求规格说明文档功能需求及相关非功能需求。<br>
+purchasebl模块的职责及接口参见软件系统结构描述文档表<br>
+
+（2）整体结构<br>
+根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加bussinesslogicservice. PurchaseBLService接口。业务逻辑层和数据层之间添加dataservicePurchaseDataService接口。为了隔离业务逻辑职责和逻辑控制职责，我们增加了PurchaseController，这样PurchaseController会将对进货的逻辑业务处理委托给Purchase对象。PurchasePO是作为进货单的持久化对象被添加到设计模型中去的<br>
+
+如图展示了Purchaseb模块的设计<br>
+<img src="../img/软件详细设计图/Purchase模块.png">
+
+
+<center>**purchase模块各个类的设计**</center>
+
+| **模块** | **职责** |
+| ------- | --------- |
+| PurchaseController | 负责实现进货管理界面所需要的服务 |
+| PurchaseTransition | 负责实现PurchasePO与VO的互换 |
+
+
+（3）模块内部类的接口规范<br>
+
+<center>**PurchaseController的接口规范**</center>
+<table><tbody>
+<tr>
+<th colspan = "3">提供的服务（供接口）</th>
+</tr>
+<tr>
+<th rowspan="3">PurchaseController.getPurchaseID</th>
+<th>语法</th>
+<th>`public String getPurchaseID()`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Purchase领域对象，并且输入符合输入规则</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回一个自动生成的进货单的ID</th>
+</tr>
+<tr>
+<th rowspan="3">PurchaseController.getPurchaseBackID</th>
+<th>语法</th>
+<th>`public String getPurchaseBackID()`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Purchase领域对象，并且输入符合输入规则</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回一个自动生成的进货单的ID</th>
+</tr>
+<tr>
+<th rowspan="3">PurchaseController.save</th>
+<th>语法</th>
+<th>`public ResultMessage save(PurchaseVO vo)`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Purchase领域对象</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>保存进货单草稿数据</th>
+</tr>
+<tr>
+<th rowspan="3">PurchaseController.submit</th>
+<th>语法</th>
+<th>`public ResultMessage submit(PurchaseVO vo)`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Purchase领域对象</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>保存进货单数据</th>
+</tr>
+<tr>
+<th rowspan="3">PurchaseController.find</th>
+<th>语法</th>
+<th>`public ArrayList<PurchaseVO> find(String info, FindSalesType type)`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Purchase领域对象</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回所有符合条件进货单的数据</th>
+</tr>
+<tr>
+<th rowspan="3">PurchaseController.show</th>
+<th>语法</th>
+<th>`public ArrayList<PurchaseVO> show()`</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已创建一个Purchase领域对象</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>返回所有符合条件进货单的数据</th>
+</tr>
+</table>
+
+<table><tbody>
+<tr>
+<th colspan = "2">需要的服务（需接口）</th>
+</tr>
+<tr>
+<th>服务名</th>
+<th>服务</th>
+</tr>
+<tr>
+<th>`PurchaseDataService.findPurchase(String keyword, FindSalesType type)`</th>
+<th>根据字段名和值查找多个持久化对象</th>
+</tr>
+<tr>
+<th>`PurchaseDataService.insertPurchase(PurchasePO po)`</th>
+<th>增加单一持久化对象</th>
+</tr>
+<tr>
+<th>`PurchaseDataService.deletePurchase(String id)`</th>
+<th>删除单一持久化对象</th>
+</tr>
+<tr>
+<th>`PurchaseDataService.updatePurchase(PurcahsePO po)`</th>
+<th>更新单一持久化对象</th>
+</tr>
+<tr>
+<th>`PurchaseDataService.show()`</th>
+<th>返回全部持久化对象</th>
+</tr>
+<tr>
+<th>`UseDataService.findUser`</th>
+<th>查找用户</th>
+</tr>
+<tr>
+<th>`CommodityDataService.findCommodity`</th>
+<th>将查找商品</th>
+</tr>
+</table>
+
+（4）业务逻辑层的动态模型<br>
+
+该图展示了进货人员需要进行单据的提交时，进货业务逻辑处理的相关对象之间的协作<br>
+<img src="../img/软件详细设计图/submitPurchase.png">
+
+
+该图展示了进货人员需要进行单据的保存时，进货业务逻辑处理的相关对象之间的协作<br>
+<img src="../img/软件详细设计图/savePurchase.png">
+
+
+该图所示的状态图描述了Purchase对象的生存期间的状态序列、引起转移的事件，以及因状态转移而伴随的动作<br>
+<img src="../img/软件详细设计图/Purchase对象状态图.png">
+
+ (5)业务逻辑层的设计原理<br>
+利用委托式风格，每个界面需要访问的业务逻辑由各自的控制器委托给不同的领域对象。
+
+<<<<<<< HEAD
+4.1.9 promotionbl 模块<br>
+（1）模块概述<br>
+promotionbl模块承担的需求参见需求规格说明文档功能需求及相关非功能需求。<br>
+promotionbl模块的职责及接口参见软件系统结构描述文档表<br>
+
+（2）整体结构<br>
+根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加bussinesslogicservice. PromotionBLService接口。业务逻辑层和数据层之间添加dataservice. PromotionDataService接口。为了隔离业务逻辑职责和逻辑控制职责，我们增加了PromotionController，这样PromotionController会将对客户的逻辑业务处理委托给Promotion对象。PromotionPO是作为客户的持久化对象被添加到设计模型中去的。
+Promotionbl模块的设计如图
+
+<img src="../img/软件详细设计图/制定销售策略设计类图.png">
+Promotionbl各个类的职责如图
+| **模块** | **职责** |
+| PromotionController | 负责实现制定销售策略界面所需要的服务 |
+| Promotion | 制定销售策略的领域模型对象 |
+（3）模块内部类的接口规范<br>
+<center>**Promotion的接口规范**</center>
+<table><tbody>
+<tr>
+<th colspan="3">提供的服务（供接口）</th>
+</tr>
+<tr>
+<th rowspan="3">Promotion.getPromotionList</th>
+<th>语法</th>
+<th>public ArrayList<PromotionVO> getCommodityPromotionListByID(int commodityID)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>关键字符合输入条件，id符合输入条件</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>查询到目标销售策略</th>
+</tr>
+<tr>
+<th rowspan="3">Promotion.getID</th>
+<th>语法</th>
+<th>public String getBillID</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>类型、名字、级别、电话、地址、邮编等符合输入条件</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>成功获得账单ID</th>
+</tr>
+<tr>
+<th rowspan="3">Promotion.getclientID()</th>
+<th>语法</th>
+<th>public String getclientID()</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>属性符合输入条件</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>成功获得客户ID</th>
+</tr>
+<tr>
+<th rowspan="3">Promotion.getclientName</th>
+<th>语法</th>
+<th>public String getclientName()</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>输入的客户ID符合输入条件</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>成功获得客户姓名</th>
+</tr>
+</table>
+<table><tbody>
+
+<table><tbody>
+<tr>
+<th colspan = "2">需要的服务（需接口）</th>
+</tr>
+
+</tr>
+</table>
+
+（4）业务逻辑层的动态模型<br>
+该图展示了当总经理想要制定销售策略的时候，制定销售策略业务逻辑处理的相关对象之间的协作<br>
+<img src="../img/软件详细设计图/制定销售策略顺序图.png">
+=======
+　　　　4.1.10 InventoryBillbl模块
+
+　　　　(1)模块概述
+
+　　InventoryBill模块承担的需求参见需求规格说明文档功能需求及相关非功能需求。
+
+　　InventoryBill模块的职责及接口参见软件系统结构描述文档表
+
+　　　　(2)整体结构
+
+　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加bussinesslogicservice.inventoryBillservice.InventoryBillBLService接口。业务逻辑层和数据层之间添加dataservice.inventoryBilldataservice.InventoryBillDataService接口。为了隔离业务逻辑职责和逻辑控制职责，我们增加了InventoryBillController，这样InventoryBillController会将对库存类单据的业务逻辑处理委托给billController对象。InventoryBillPO是作为单据记录的持久化对象添加到设计模型中去的。<br>
+<img src="../img/软件详细设计图/bill模块各个类的设计.png"><br>
+<center>**bill模块各个类的设计**</center>
+
+|模块|职责|
+| --- | --- |
+|InventoryBillController|负责实现库存类单据界面所需要的服务|
+|InventoryBill|库存类单据的模型对象，拥有库存类单据所持有的编号，时间等信息，可以帮助库存管理人员库存类单据界面所需要的服务|
+
+　　　　(3)模块内部类的接口规范
+
+<center>**InventoryBillController的接口规范**</center>
+
+　**InventoryBillController模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|InventoryBillController.getID|语法|`public String getId(BillType type)`|
+||前置条件|已经创建一个inventoryBillBL领域对象|
+||后置条件|调用inventoryBillBL的getId()方法|
+|InventoryBillController.save|语法|`public ResultMessage save(InventoryBillVO vo)`|
+||前置条件|已经创建一个inventoryBillBL领域对象|
+||后置条件|调用inventoryBillBL的save()方法|
+|InventoryBillController.delete|语法|`public void delete(InventoryBillVO clickedItem)`|
+||前置条件|已经创建一个inventoryBillBL领域对象|
+||后置条件|调用inventoryBillBL的delete()方法|
+|InventoryBillController.submit|语法|`public ResultMessage submit(InventoryBillVO clickedItem)`|
+||前置条件|已经创建一个inventoryBillBL领域对象|
+||后置条件|调用inventoryBillBL的submit()方法|
+|InventoryBillController.show|语法|`public ArrayList<InventoryBillVO> show()`|
+||前置条件|已经创建一个inventoryBillBL领域对象|
+||后置条件|调用inventoryBillBL的show()方法|
+|InventoryBillController.find|语法|`public ArrayList<InventoryBillVO> find(String text, FindInventoryBillType type)`|
+||前置条件|已经创建一个inventoryBillBL领域对象|
+||后置条件|调用inventoryBillBL的find()方法|
+
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|InventoryBillBL.save|新增或更新单据信息|
+|InventoryBillBL.delete|删除单据|
+|InventoryBillBL.getID|返回待新增的单据id|
+|InventoryBillBL.find(String text,FindInventoryBillType type)|根据text查找单据|
+|InventoryBillBL.submit|提交单据|
+|InventoryBillBL.show|返回系统中所有库存类单据|
+<br/>
+
+　**InventoryBillbl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|InventoryBill.getID|语法|`public String getId(BillType type)`|
+||前置条件|启动一个新增库存类单据的回合|
+||后置条件|返回待新增单据的ID|
+|InventoryBill.save|语法|`public ResultMessage save(InventoryBillVO vo)`|
+||前置条件|单据信息符合规则|
+||后置条件|查找是否存在该单据，若不存在则新增，存在则更新，返回保存验证的结果|
+|InventoryBill.delete|语法|`public void delete(InventoryBillVO clickedItem)`|
+||前置条件|单据符合规则|
+||后置条件|查找是否有该单据，若存在则删除|
+|InventoryBill.submit|语法|`public ResultMessage submit(InventoryBillVO clickedItem)`|
+||前置条件|单据信息符合规则|
+||后置条件|查找是否有该单据，若存在则修改单据状态为已提交，返回提交验证的结果|
+|InventoryBill.show|语法|`public ArrayList<InventoryBillVO> show()`|
+||前置条件|启动一个查看过往单据的回合|
+||后置条件|返回系统中所有的库存类单据的list|
+|InventoryBill.find|语法|`public ArrayList<InventoryBillVO> find(String text, FindInventoryBillType type)`|
+||前置条件|text符合规则|
+||后置条件|返回符合text的库存类单据的列表|
+
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|InventoryBillDataService.insert|插入单一持久化对象|
+|InventoryBillDataService.update|更新打印持久化对象|
+|InventoryBillDataService.delete|删除单一持久化对象|
+|InventoryBillDataService.find(String keyword,FindInventoryBillType type)|根据keword查找多个持久化对象|
+|InventoryBillDataService.show|返回数据库中所有持久化对象|
+<br/>
+
+（4）业务逻辑层的动态模型
+该图表明了SIMS系统中，当用户点击输入新增添的单据之后，单据业务逻辑处理相关对象之间的协作<br>
+<img src="../img/软件详细设计图/添加单据的顺序图.png"><br>
+该图表明了SIMS系统中，当用户点击输入查询单据之后，单据业务逻辑处理相关对象之间的协作<br>
+<img src="../img/软件详细设计图/查询单据的顺序图.png"><br>
+
+　　　　4.1.11 tablebl 模块
+
+　　　　(1)模块概述
+
+　　tablebl模块承担的需求参见需求规格说明文档功能需求及相关非功能需求。
+
+　　tablebl模块的职责及接口参见软件系统结构描述文档表。
+　　　　(2)整体结构
+
+　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加bussinesslogicservice. SaleScheduleBLService、businesslogicservice.BusinessSituationBLservice和经营历程表的接口。
+
+tablebl各个类的职责如图
+| **模块** | **职责** |
+|businesshistorybl|负责实现查看经营历程表界面所需要的服务|
+|businesssituationbl|负责实现查看经营情况表界面所需要的服务|
+|saleschedulebl|负责实现查看销售明细表界面所需要的服务|
+
+　　　　(3)模块内部类的接口规范
+
+　**businesshistorybl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|businesshistory.show|语法|` public ArrayList<B> show()`|
+||前置条件|启动一个查看经营历程表的回合|
+||后置条件|返回通过审批的对应单据|
+|businesshistory.siftTime|语法|`public ArrayList<B> siftTime(LocalDate start,LocalDate end)`|
+||前置条件|输入合理的筛选条件范围|
+||后置条件|返回筛选出的单据|
+|businesshistory.sift|语法|`public ArrayList<B> sift(String  info,FindSaleScheduleType type)`|
+||前置条件|info符合输入规则|
+||后置条件|返回符合info的单据列表|
+|businesshistory.exportReport|语法|`public void exportReport(ArrayList<B> table)`|
+||前置条件|启动生成表格的回合|
+||后置条件|导出excel表格|
+|businesshistory.writeOff|语法|`public ArrayList<B> writeOff(ArrayList<B> table)`|
+||前置条件|启动一个红冲回合|
+||后置条件|进行红冲操作并将单据入账并返回红冲后的单据|
+|businesshistory.writeOffAndCopy|语法|`public ArrayList<B> writeOffAndCopy(ArrayList<B> table)`|
+||前置条件|启动一个红冲并复制回合|
+||后置条件|将单据入账，返回操作后的单据|
+|businesshistory.updateBill|语法|`public ResultMessage updateBill(B table)`|
+||前置条件|启动一个红冲并复制回合|
+||后置条件|进行红冲并复制操作并将单据入账|
+
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|purchaseservice.show|获得系统中的进货单和进货退货单|
+|salesservice.show|获得系统中的销售单和销售退货单|
+|paymentbillservice.show|获得系统中的付款单|
+|receiptbillservice.show|获得系统中的收款单|
+|inventorybillservice.show|获得系统中的库存类单据|
+|examineblservice.passbill|审批单据|
+<br/>
+　**businesssituationbl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|businesssituation.showPay|语法|`public ArrayList<PaymentTableVO> showPay()`|
+||前置条件|启动一个查看经营情况表的回合|
+||后置条件|返回支出类|
+|businesssituation.showReceive|语法|`public ArrayList<ReceiveTableVO> showReceive()`|
+||前置条件|启动一个查看经营情况表的回合|
+||后置条件|返回收入类|
+|businesssituation.siftPay|语法|`public ArrayList<PaymentTableVO> siftPay(LocalDate start,LocalDate end)`|
+||前置条件|输入合理的筛选条件范围|
+||后置条件|返回筛选出的付款单List|
+|businesssituation.siftReceive|语法|`public ArrayList<ReceiveTableVO> siftReceive(LocalDate start,LocalDate end)`|
+||前置条件|输入合理的筛选条件范围|
+||后置条件|返回筛选出的收款单List|
+|businesssituation.exportReport|语法|`public void exportReport(ArrayList<PaymentTableVO> pay,ArrayList<ReceiveTableVO> receive)`|
+||前置条件|启动生成表格的回合|
+||后置条件|导出excel表格|
+
+
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|paymentbillservice.show|获得系统中的付款单|
+|receiptbillservice.show|获得系统中的收款单|
+<br/>
+　**saleschedulebl模块的接口规范**
+
+|提供的服务|供接口||
+| --- | --- | --- |
+|saleschedule.show|语法|` public ArrayList<SaleScheduleVO> show()`|
+||前置条件|启动一个查看销售明细表的回合|
+||后置条件|返回通过审批的对应单据的销售信息|
+|saleschedule.siftTime|语法|`public ArrayList<SaleScheduleVO> siftTime(LocalDate start,LocalDate end)`|
+||前置条件|输入合理的筛选条件范围|
+||后置条件|返回筛选出的单据的销售信息|
+|saleschedule.sift|语法|`public ArrayList<SaleScheduleVO> sift(String info,FindSaleScheduleType type)`|
+||前置条件|info符合输入规则|
+||后置条件|返回符合info的单据列表的对应销售信息|
+|saleschedule.exportReport|语法|`public void exportReport(ArrayList<SaleScheduleVO> sale)`|
+||前置条件|启动生成表格的回合|
+||后置条件|导出excel表格|
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|salesservice.show|获得系统中的销售单和销售退货单|
+<br/>
+
+
+（4）业务逻辑层的动态模型<br>
+该图展示了当财务人员或总经理想要查看表格的时候，查看表格业务逻辑处理的相关对象之间的协作<br>
+
+4.2.1 mainui模块<br>
+（1）模块概述<br>
+mainui模块承担的需求为登录主界面需求<br>
+mainui模块的职责及接口为登录user的使用概况<br>
+（2）整体结构<br>
+为提供给业务逻辑层，我们直接使用bussinesslogicservice.userblservice.UserBLService接口来调用关于用户的信息。
+<center>**mainui模块各个类的设计**</center>
+<table><tbody>
+<tr>
+<th>模  块</th>
+<th>职  责</th>
+</tr>
+<tr>
+<th>mainui</th>
+<th>负责实现对应于登录界面所需要的服务</th>
+</tr>
+</table>
+（3）模块内部类的接口规范
+<center>**mainui的接口规范**</center>
+<table><tbody>
+<tr>
+<th colspan = "3">提供的服务（供接口）</th>
+</tr>
+<tr>
+<th rowspan="3">MainUI.sendinfo</th>
+<th>语法</th>
+<th><code>public ResultMessage login(String info)</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>已输入用户名和密码，并且输入符合输入规则</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>调用mainui领域对象的login方法</th>
+</tr>
+<tr>
+
+</table>
+
+<table><tbody>
+<th colspan = "2">需要的服务（需接口）</th>
+</tr>
+<tr>
+<th>服务名</th>
+<th>服务</th>
+</tr>
+<tr>
+<th>UserDataService.isExist(String info)</th>
+<th>根据ID和密码判断是否存在该用户</th>
+</tr>
+</table>
+
+4.2.2 commodityui模块<br>
+（1）模块概述<br>
+commodityui模块承担的需求参见需求规格说明文档功能需求及相关非功能需求。<br>
+commodityui模块的职责及接口参见软件系统结构描述文档表<br>
+（2）整体结构<br>
+根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加bussinesslogicservice.commodityblservice.CommodityBLService接口与bussinesslogicservice.commodityblservice.ClassificationBLService接口。为了隔离业务逻辑职责和逻辑控制职责，我们增加了CommodityControllerUI，这样CommodityControllerUI会将对商品的业务逻辑处理委托给Commodity对象。CommodityVO和ClassificationVO是作为商品和其分类的记录的可视化对象添加到设计模型中去的。presentation.billui.BillUI则是由发出单据制作要求后新起的一个界面而制定的一个链接。<br>
+<img src="../img/软件详细设计图/CommodityUI.png"><br>
+<center>**CommodityUI模块各个类的设计**</center>
+<table><tbody>
+<tr>
+<th>模  块</th>
+<th>职  责</th>
+</tr>
+<tr>
+<th>CommodityControllerUI</th>
+<th>负责实现对应于库存管理人员主界面所需要的服务</th>
+</tr>
+<tr>
+<th>CommodityUI</th>
+<th>商品管理的模型对象，拥有一个商品所持有的数量、售价等信息以及其方法</th>
+</tr>
+<tr>
+<th>ClassificationUI</th>
+<th>商品分类管理的模型对象，拥有一个商品分类所持有的数量、商品等信息以及其方法</th>
+</tr>
+</table>
+
+（3）模块内部类的接口规范
+<center>**CommodityControllerUI的接口规范**</center>
+<table><tbody>
+<tr>
+<th colspan = "3">提供的服务（供接口）</th>
+</tr>
+<tr>
+<th rowspan="3">CommodityControllerUI.exit</th>
+<th>语法</th>
+<th><code>public ResultMessage exit()</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>当界面需要注销</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>调用CommodityUI领域对象的exit方法</th>
+</tr>
+<tr>
+<th rowspan="3">CommodityControllerUI.makeInventoryBill</th>
+<th>语法</th>
+<th><code>public ResultMessage makeInventoryBill()</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>需要进行制作单据操作</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>调用CommodityUI领域对象的makeInventoryBill</th>
+</tr>
+</table>
+
+<center>**CommodityUI的接口规范**</center>
+<table><tbody>
+<tr>
+<th colspan = "2">需要的服务（需接口）</th>
+</tr>
+<tr>
+<th>服务名</th>
+<th>服务</th>
+</tr>
+<tr>
+<th><code>CommodityBLService.find(String id)</th>
+<th>根据ID进行查找单一可视化对象</th>
+</tr>
+<tr>
+<th><code>CommodityBLService.finds(String field,int value)</th>
+<th>根据字段名和值查找多个可视化对象</th>
+</tr>
+<tr>
+<th><code>CommodityBLService.insert(CommodityVO vo)</th>
+<th>插入单一可视化对象</th>
+</tr>
+<tr>
+<th><code>CommodityBLService.delete(CommodityVO vo)</th>
+<th>删除单一可视化对象</th>
+</tr>
+<tr>
+<th><code>CommodityBLService.update(CommodityVO vo)</th>
+<th>更新单一可视化对象</th>
+</tr>
+<tr>
+<th><code>CommodityBLService.check()</th>
+<th>查看库存中的一段时间的对象</th>
+</tr>
+<tr>
+<th><code>CommodityBLService.stock()</th>
+<th>查看库存中的给定要求的商品对象</th>
+</tr>
+</table>
+
+<center>**ClassificationUI的接口规范**</center>
+<table><tbody>
+<tr>
+<th colspan = "2">需要的服务（需接口）</th>
+</tr>
+<tr>
+<th>服务名</th>
+<th>服务</th>
+</tr>
+<tr>
+<th><code>ClassificationBLService.insertClass(ClassificationVO vo)</th>
+<th>插入单一可视化对象</th>
+</tr>
+<tr>
+<th><code>ClassificationBLService.deleteClass(ClassificationVO vo)</th>
+<th>删除单一可视化对象</th>
+</tr>
+<tr>
+<th><code>ClassificationBLService.updateClass(ClassificationVO vo)</th>
+<th>更新单一可视化对象</th>
+</tr>
+</table>
+
+4.2.3 userui模块<br>
+（1）模块概述<br>
+userui模块承担的需求参见需求规格说明文档功能需求及相关非功能需求。<br>
+userui模块的职责及接口参见软件系统结构描述文档表<br>
+（2）整体结构<br>
+根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加bussinesslogicservice.userblservice.UserBLService接口。UserVO是作为用户的记录的可视化对象添加到设计模型中去的。<br>
+<center>**UserUI模块各个类的设计**</center>
+<table><tbody>
+<tr>
+<th>模  块</th>
+<th>职  责</th>
+</tr>
+<tr>
+<th>UserUI</th>
+<th>用户管理的模型对象，拥有一个用户所持有的用户名密码等信息以及其方法</th>
+</tr>
+</table>
+
+<center>**UserUI的接口规范**</center>
+<table><tbody>
+<tr>
+<th colspan = "2">需要的服务（需接口）</th>
+</tr>
+<tr>
+<th>服务名</th>
+<th>服务</th>
+</tr>
+<tr>
+<th><code>UserBLService.find(String id)</th>
+<th>根据ID进行查找单一可视化对象</th>
+</tr>
+<tr>
+<th><code>UserBLService.insert(UserVO vo)</th>
+<th>插入单一可视化对象</th>
+</tr>
+<tr>
+<th><code>UserBLService.delete(UserVO vo)</th>
+<th>删除单一可视化对象</th>
+</tr>
+<tr>
+<th><code>UserBLService.update(UserVO vo)</th>
+<th>更新单一可视化对象</th>
+</tr>
+</table>
+
+4.2.4 billui模块<br>
+（1）模块概述<br>
+billui模块承担的需求参见需求规格说明文档功能需求及相关非功能需求。<br>
+billui模块的职责及接口参见软件系统结构描述文档表<br>
+（2）整体结构<br>
+根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加bussinesslogicservice.billblservice.BillBLService接口。各个BillVO是作为各类单据的记录的可视化对象添加到设计模型中去的。由各个单据的界面跳转到各个Bill的UI里<br>
+<img src="../img/软件详细设计图/BillUI.png"><br>
+<center>**BillUI模块各个类的设计**</center>
+<table><tbody>
+<tr>
+<th>模  块</th>
+<th>职  责</th>
+</tr>
+<tr>
+<th>BillControllerUI</th>
+<th>负责实现对应于所有单据的界面所需要的服务</th>
+</tr>
+<tr>
+<th>InventoryBillUI</th>
+<th>库存类单据的模型对象，拥有一个库存单据所持有的商品等信息以及其方法</th>
+</tr>
+<tr>
+<th>PurchaseBillControllerUI</th>
+<th>进出货单据的模型对象，拥有一个进出货单据所持有的库存信息以及其方法</th>
+</tr>
+<tr>
+<th>SalesBillControllerUI</th>
+<th>销售单据的模型对象，拥有一个销售单据所持有的销售信息以及其方法</th>
+</tr>
+<tr>
+<th>SKDBillUI</th>
+<th>收款单据的模型对象，拥有一个收款单据所持有的账户信息以及其方法</th>
+</tr>
+<tr>
+<th>XJFYDBillUI</th>
+<th>付款单据的模型对象，拥有一个付款单据所持有的账户信息以及其方法</th>
+</tr>
+</table>
+
+（3）模块内部类的接口规范
+<center>**BillControllerUI的接口规范**</center>
+<table><tbody>
+<tr>
+<th colspan = "3">提供的服务（供接口）</th>
+</tr>
+<tr>
+<th rowspan="3">BillControllerUI.makeBill</th>
+<th>语法</th>
+<th><code>public ResultMessage makeBill()</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>需要进行制作单据操作</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>调用BillControllerUI领域对象的makeBill</th>
+</tr>
+<tr>
+<th rowspan="3">BillControllerUI.approve</th>
+<th>语法</th>
+<th><code>public ResultMessage approve()</th>
+</tr>
+<tr>
+<th>前置条件</th>
+<th>需要进行审批单据操作</th>
+</tr>
+<tr>
+<th>后置条件</th>
+<th>调用BillControllerUI领域对象的approve</th>
+</tr>
+</table>
+<table><tbody>
+<tr>
+<th colspan = "3">需要的服务（需接口）</th>
+</tr>
+<tr>
+<th>服务名</th>
+<th>服务</th>
+</tr>
+<tr>
+<th><code>BillBLService.insert(BillVO vo)</th>
+<th>插入单一可视化对象</th>
+</tr>
+<tr>
+<th><code>BillBLService.update(BillVO vo)</th>
+<th>更新单一可视化对象</th>
+</tr>
+<tr>
+<th><code>BillBLService.find(long id)</th>
+<th>查询单一可视化对象</th>
+</tr>
+</table>
+
+4.2.5　accountui模块
+
+(1)模块概述
+
+accountui模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+Accountui模块的职责及接口参见软件体系结构描述文档表。
+
+(2)整体结构
+
+根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加businesslogicservice.accountblservice.AccountBLService接口。
+
+accountui模块的设计如图所示。
+
+<center>**accountui模块各个类的职责如下所示**</center>
+
+
+|模块|职责|
+| --- | --- |
+|AccountUI|账户管理界面的模型对象|
+
+(3)模块内部类的接口规范
+
+AccountUI的接口规范
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|`AccountUI.find(string message)`|根据查找内容查找账户|
+|`AccountUI.newBuild(AccountVO accountVO)`|添加账户|
+|`AccountUI.delete(AccountVO accountVO)`|删除账户|
+|`AccountUI.modify(AccountVO accountVO)`|修改账户|
+<br/>
+
+4.2.6　mfdocui模块
+
+　　　　(1)模块概述
+
+　　　　mfdocui模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+　　　　MFDocUI模块的职责及接口参见软件体系结构描述文档表。
+
+　　　　(2)整体结构
+
+　　　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加businesslogicservice.mfdocblservice.MFDocBLService接口。
+
+　　　　mfdocui模块的设计如图所示。
+
+　　mfdocui模块各个类的职责如下所示
+<br/>
+
+|模块|职责|
+| --- | --- |
+|ReceiptBillUI|收款单界面的模型对象|
+|PaymentBilUI|付款单界面的模型对象|
+
+　　　　(3)模块内部类的接口规范
+
+　　　ReceiptBillUI的接口规范(PaymentBillUI类似)
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|`ReceiptBillUI.find(String message)`|根据查找内容查找单据|
+|`ReceiptBillUI.newBuild(ReceiptBillVO receiptBillVO)`|添加单据|
+|`ReceiptBillUI.delete(ReceiptBillVO receiptBillVO)`|删除单据|
+|`ReceiptBillUI.modify(ReceiptBillVO receiptBillVO)`|修改单据|
+|`ReceiptBillUI.commit(ReceiptBillVO receiptBillVO)`|提交单据|
+<br/>
+
+　　　　4.2.7　accountBookui模块
+
+　　　　(1)模块概述
+
+　　　　accountBookui模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+　　　 AccountBookui模块的职责及接口参见软件体系结构描述文档表。
+
+　　　　(2)整体结构
+
+　　　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加businesslogicservice.accountBookblservice.AccountBookBLService接口。
+
+　　　　accountBookui模块的设计如图所示。
+
+　　accountBookui模块各个类的职责如下所示
+<br/>
+
+|模块|职责|
+| --- | --- |
+|AccountBookUI|账户管理界面的模型对象|
+
+　　　　(3)模块内部类的接口规范
+
+　　　AccountBookUI的接口规范
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|`AccountBookUI.newBuild(AccountBookVO accountBookVO)`|添加账簿|
+|`AccountBookUI.find()`|查找所有的账簿|
+<br/>
+
+4.2.8　saleui模块
+
+(1)模块概述
+
+saleui模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+Saleui模块的职责及接口参见软件体系结构描述文档表。
+
+(2)整体结构
+
+根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加businesslogicservice.saleblservice.SaleBLService接口。
+
+saleui模块的设计如图所示。
+
+<center>**saleui模块各个类的职责如下所示**</center>
+
+
+|模块|职责|
+| --- | --- |
+|SalesCheckBillController|销售初始化界面的模型对象|
+|SalesMakeBillController|销售单制作界面的模型对象|
+|SalesStockStaffController|销售check界面的模型对象|
+
+(3)模块内部类的接口规范
+
+SalesUI的接口规范
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|`SalesMakeBillController.save(SaleVO vo)`|保存草稿单据|
+|`SalesMakeBillController.submit(SaleVO vo)`|提交草稿单据|
+|`SalesMakeBillController.fresh()`|刷新界面|
+|`SalesMakeBillController.logout()`|退出界面|
+
+
+<br/>
+
+4.2.9　purchaseui模块
+
+(1)模块概述
+
+purchaseui模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+Purchaseui模块的职责及接口参见软件体系结构描述文档表。
+
+(2)整体结构
+
+根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加businesslogicservice.purchaseblservice.PurchaseBLService接口。
+
+purchaseui模块的设计如图所示。
+
+<center>**purchasaeui模块各个类的职责如下所示**</center>
+
+
+|模块|职责|
+| --- | --- |
+|PurchaseCheckBillController|进货初始化界面的模型对象|
+|PurchaseMakeBillController|进货单制作界面的模型对象|
+|PurchaseStockStaffController|进货单check界面的模型对象|
+
+(3)模块内部类的接口规范
+
+PurchaseUI的接口规范
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|`PurchaseMakeBillController.save(PurchaseVO vo)`|保存草稿单据|
+|`PurchaseMakeBillController.submit(PurchaseVO vo)`|提交草稿单据|
+|`PurchaseMakeBillController.fresh()`|刷新界面|
+|`PurchaseMakeBillController.logout()`|退出界面|
+
+<br/>
+
+4.2.10　Memberui模块
+
+(1)模块概述
+
+memberui模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+Memebrui模块的职责及接口参见软件体系结构描述文档表。
+
+(2)整体结构
+
+根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加businesslogicservice.memberblservice.MemberBLService接口。
+
+memberui模块的设计如图所示。
+
+<center>**memberui模块各个类的职责如下所示**</center>
+
+
+|模块|职责|
+| --- | --- |
+|MemberManageController|客户界面的模型对象|
+
+(3)模块内部类的接口规范
+
+MemberUI的接口规范
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|`MemberManageController.insert(MemberVO vo)`|保存客户数据|
+|`MemberManageController.delete(String ID)`|删除客户|
+|`MemberManageController.find()`|查找客户|
+|`MemberManageController.exit()`|退出界面|
+|`MemberManageController.initData()`|初始化数据|
+|`MemberManageController.find()`|查找客户|
+|`MemberManageController.deleteInit()`|删除客户后刷新界面|
+|`MemberManageController.initfind()`|查找客户后刷新界面|
+|`MemberManageController.initInsert()`|存储客户后刷新界面|
+<br/>
+
+4.2.11　promotionui模块
+
+(1)模块概述
+
+promotionui模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+Promotionui模块的职责及接口参见软件体系结构描述文档表。
+
+(2)整体结构
+
+根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如展示层和业务逻辑层之间，我们添加businesslogicservice.promotionblservice.PromotionBLService接口。
+
+Promotionui模块的设计如图所示。
+
+<center>**promotionui模块各个类的职责如下所示**</center>
+
+
+|模块|职责|
+| --- | --- |
+|PromotionMakingController|促销界面的模型对象|
+|PromotionMemberController|等级促销界面的模型对象|
+|PrpmotionSpecialController|特价包界面的模型对象|
+|PrpmotionSumController|总额促销界面的模型对象|
+
+(3)模块内部类的接口规范
+
+PromotionUI的接口规范
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|`PromotionMakingController.choosePromotion())`|选择促销策略|
+|`PromotionMakingController.initData(UserVO vo)`|初始化界面数据|
+|`PromotionMakingController.choiceInit(UserVO vo)`|初始化界面数据|
+
+<br/>
+
+　4.3.1 commoditydata模块<br>
+
+　　　　(1)模块概述<br>
+
+commoditydata模块承担的需求参见需求规格说明文档功能需求及相关非功能需求。<br>
+
+commoditydata模块的职责及接口参见软件系统结构描述文档表<br>
+
+　　　　(2)整体结构<br>
+　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。业务逻辑层和数据层之间添加dataservice.commoditydataservice.CommodityDataService接口和dataservice.commoditydataservice.ClassificationDataService接口。CommodityData是承接商品的各类数据的，而ClassificationData是作为商品的分类而聚合在其中。<br>
+
+<img src="../img/软件详细设计图/CommodityData.png"><br>
+　　
+
+|模块|职责|
+| --- | --- |
+|CommodityData|商品的模型对象，拥有一个商品各类数据及其方法|
+|Classification|商品分类的模型对象，拥有一个商品分类各类数据及其方法|
+
+　　　　(3)模块内部类的接口规范
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|`Commodity.insert(CommodityVO vo)`|插入单一持久化对象|
+|`Commodity.delelte(String id)`|删除单一持久化对象|
+|`Commodity.update(CommodityVO vo)`|更新单一持久化对象|
+|`Commodity.find(String keywords,FindCommodityType type)`|根据keywords查找多个持久化对象|
+|`Commodity.show()`|返回数据库中所有持久化对象|
+<br/>
+
+|需要的服务|需接口|
+| --- | --- |
+|服务名|服务|
+|`Classification.insert()`|插入单一持久化对象|
+|`Classification.update`|更新打印持久化对象|
+|`Classification.delete`|删除单一持久化对象|
+|`Classification.getRoot`|返回数据库中根节点持久化对象|
+|`Classification.find(String name)`|根据name查找单一持久化对象|
+|`Classification.show`|返回数据库中所有持久化对象|
+|`Classification.getId`|返回待新增分类的Id|
+<br/>
+　　　　4.3.2 userdata模块
+
+　　　　(1)模块概述
+
+　　　　userdata模块承担的需求参见需求规格说明文档功能需求及相关非功能需求。
+
+　　　　userdata模块的职责及接口参见软件系统结构描述文档表
+
+　　　　(2)整体结构
+
+　　　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。业务逻辑层和数据层之间添加dataservice.userdataservice.CommodityDataService接口。UserData是承接用户的各类数据的。
+
+　　　userdata模块各个类的职责如下所示
+<br/>
+
+|模块|职责|
+| --- | --- |
+|UserData|用户的模型对象，拥有用户的各类数据以及方法|
+
+　　　　(3)模块内部类的接口规范
+
+　　　UserData的接口规范
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|`Userdataservice.login(String id,String password)`|根据id和password进行登录|
+|`Userdataservice.insert(User PO)`|插入单一持久化对象|
+|`Userdataservice.delete(User PO)`|删除单一持久化对象|
+|`Userdataservice.update(User PO)`|更新单一持久化对象|
+|`Userdataservice.find(String info,FindUserType type)`|根据Info查找多个持久化对象|
+|`Userdataservice.show()`|返回数据库中所有持久化对象|
+<br/>
+
+　　　　4.3.3 inventorybilldata模块
+
+　　　　(1)模块概述
+
+　　　　inventorybilldata模块承担的需求参见需求规格说明文档功能需求及相关非功能需求。
+　　　　inventorybilldata模块的职责及接口参见软件系统结构描述文档表
+
+　　　　(2)整体结构
+
+　　　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。业务逻辑层和数据层之间添加dataservice.inventorybilldataservice.InventoryBillDataService接口。InventoryBillData是承接库存类单据的各类数据的。
+
+　inventorybilldata模块各个类的职责如下所示
+<br/>
+
+|模块|职责|
+| --- | --- |
+|InventoryBillData|库存类单据的模型对象，拥有库存类单据的各类数据以及方法|
+
+　　　　(3)模块内部类的接口规范
+
+　　　InventoryBillData的接口规范
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|`Inventory.insert(InventoryBillPO po)`|插入单一持久化对象|
+|`Inventory.update(InventoryBillPO po)`|更新打印持久化对象|
+|`Inventory.delete(InventoryBillPO po)`|删除单一持久化对象|
+|`Inventory.find(String keyword,FindInventoryBillType type)`|根据keword查找多个持久化对象|
+|`Inventory.show()`|返回数据库中所有持久化对象|
+<br/>
+
+　　　　4.3.4　accountdata模块
+
+　　　　(1)模块概述
+
+　　　　accountdata模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+　　　　Accountdata模块的职责及接口参见软件体系结构描述文档表。
+
+　　　　(2)整体结构
+
+　　　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如业务逻辑层和数据层之间，我们添加dataservice.accountdataservice.AccountDataService接口。AccountPO是作为账户记录的持久化对象被添加到设计模型中去的。
+
+　　accountdata模块各个类的职责如下所示
+<br/>
+
+|模块|职责|
+| --- | --- |
+|AccountData|银行账户的模型对象，拥有银行账户的各类数据以及方法|
+
+　　　　(3)模块内部类的接口规范
+
+　　　AccountData的接口规范
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|`AccountDataService.find(String keywords, FindAccountType type)`|根据keywords查找单一持久化对象|
+|`AccountDataService.insert(AccountPO po)`|新建单一持久化对象|
+|`AccountDataService.delete(String id)`|删除单一持久化对象|
+|`AccountDataService.update(AccountPO po)`|更新单一持久化对象|
+|`AccountDataService.show()`|返回数据库中所有持久化对象|
+|`AccountDataService.updateMoney(String id, double money)`|更新id对应账户的银行账户信息|
+<br/>
+
+　　　　4.3.5　mfdocdata模块(财务类单据模块)
+
+　　　　(1)模块概述
+
+　　　　mfdocdata模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+　　　　MFDocdata模块的职责及接口参见软件体系结构描述文档表。
+
+　　　　(2)整体结构
+
+　　　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如业务逻辑层和数据层之间，我们添加dataservice.paymentbilldataservice.PaymentBillDataService接口和dataservice.receiptbilldataservice.ReceiptBillDataService。PaymentBillPO和ReceiptBillPO分别是作为收款单和现金费用单的持久化对象被添加到设计模型中去的。
+
+　　mfdocdata模块各个类的职责如下所示
+<br/>
+
+|模块|职责|
+| --- | --- |
+|ReceiptBillData|收款单的模型对象，拥有收款单的各类数据以及方法|
+|PaymentBillData|付款单的模型对象，拥有收款单的各类数据以及方法|
+
+　　　　(3)模块内部类的接口规范
+
+　　　ReceiptBillData的接口规范(PaymentBillData的接口规范类似)
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|`ReceiptBill.insert(ReceiptBillPO po)`|插入单一持久化对象|
+|`ReceiptBill.update(ReceiptBillPO po)`|更新打印持久化对象|
+|`ReceiptBill.delete(ReceiptBillPO po)`|删除单一持久化对象|
+|`ReceiptBill.find(String keyword,FindInventoryBillType type)`|根据keword查找多个持久化对象|
+|`ReceiptBill.show()`|返回数据库中所有持久化对象|
+<br/>
+
+　　　　4.3.6　accountbookdata模块
+
+　　　　(1)模块概述
+
+　　　　accountbookdata模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+　　　　AccountBookdata模块的职责及接口参见软件体系结构描述文档表。
+
+　　　　(2)整体结构
+
+　　　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如业务逻辑层和数据层之间，我们添加dataservice.accountbookdataservice.AccountBookDataService接口。AccountBookPO是作为账户记录的持久化对象被添加到设计模型中去的。
+
+　　accountbookdata模块各个类的职责如下所示
+<br/>
+
+|模块|职责|
+| --- | --- |
+|AccountBookData|账簿的模型对象，拥有账簿的各类数据以及方法|
+
+　　　　(3)模块内部类的接口规范
+
+　　　AccountBookData的接口规范
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|accountbook.show|语法|`public ArrayList<AccountBookVO> show()`|
+||前置条件|查看所有账簿|
+||后置条件|返回系统中的所有账簿|
+|accountbook.newBuild|语法|`public ResultMessage newBuild(AccountBookVO accountBookVO)`|
+||前置条件|启动一个期初建账回合|
+||后置条件|查看是否存在该年账簿，若没有，则新增，返回新增验证信息|
+|accountbook.choseByYear|语法|`public AccountBookVO choseByYear(int date)`|
+||前置条件|查看特定年份账户，date输入符合规则|
+||后置条件|返回date对应的账簿|
+<br/>
+
+4.3.7　Saledata模块
+
+　　　　(1)模块概述
+
+　　　　saledata模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+　　　　Saledata模块的职责及接口参见软件体系结构描述文档表。
+
+　　　　(2)整体结构
+
+　　　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如业务逻辑层和数据层之间，我们添加dataservice.saledataservice.SaleDataService接口。AccountPO是作为销售记录的持久化对象被添加到设计模型中去的。
+
+　　saledata模块各个类的职责如下所示
+<br/>
+
+|模块|职责|
+| --- | --- |
+|SaleData|销售(退货)的模型对象，拥有销售单据的各类数据以及方法|
+
+　　　　(3)模块内部类的接口规范
+
+　　　SaleData的接口规范
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|`SaleDataService.find(String keywords, FindSaleType type)`|根据keywords查找单一持久化对象|
+|`SaleDataService.insert(SalePO po)`|新建单一持久化对象|
+|`SaleDataService.delete(String id)`|删除单一持久化对象|
+|`SaleDataService.update(SalePO po)`|更新单一持久化对象|
+|`SaleDataService.show()`|返回数据库中所有持久化对象|
+<br/>
+
+4.3.8　Purchasedata模块
+
+　　　　(1)模块概述
+
+　　　　purchasedata模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+　　　　Purchasedata模块的职责及接口参见软件体系结构描述文档表。
+
+　　　　(2)整体结构
+
+　　　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如业务逻辑层和数据层之间，我们添加dataservice.purchasedataservice.PurchaseDataService接口。PurchasePO是作为进货记录的持久化对象被添加到设计模型中去的。
+
+　　Purchasedata模块各个类的职责如下所示
+<br/>
+
+|模块|职责|
+| --- | --- |
+|PurchaseData|进货(退货)的模型对象，拥有进货单据的各类数据以及方法|
+
+　　　　(3)模块内部类的接口规范
+
+　　　SaleData的接口规范
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|`PurchaseDataService.find(String keywords, FindSaleType type)`|根据keywords查找单一持久化对象|
+|`PurchaseDataService.insert(PurchasePO po)`|新建单一持久化对象|
+|`PurchaseDataService.delete(String id)`|删除单一持久化对象|
+|`PurchaseDataService.update(PurchasePO po)`|更新单一持久化对象|
+|`PurchaseDataService.show()`|返回数据库中所有持久化对象|
+<br/>
+
+4.3.9　Memberdata模块
+
+　　　　(1)模块概述
+
+　　　　Memberdata模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+　　　　Memberdata模块的职责及接口参见软件体系结构描述文档表。
+
+　　　　(2)整体结构
+
+　　　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如业务逻辑层和数据层之间，我们添加dataservice.memberdataservice.MemberDataService接口。MemberPO是作为客户记录的持久化对象被添加到设计模型中去的。
+
+　　Memberdata模块各个类的职责如下所示
+<br/>
+
+|模块|职责|
+| --- | --- |
+|MemberData|客户的模型对象，拥有客户单据的各类数据以及方法|
+
+　　　　(3)模块内部类的接口规范
+
+　　　MemberData的接口规范
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|`MemberDataService.find(String keywords, FindMemberType type)`|根据keywords查找单一持久化对象|
+|`MemberDataService.insert(MemberPO po)`|新建单一持久化对象|
+|`MemberDataService.delete(String id)`|删除单一持久化对象|
+|`MemberDataService.update(MemberPO po)`|更新单一持久化对象|
+|`MemberDataService.show()`|返回数据库中所有持久化对象|
+<br/>
+
+4.3.10　Promotiondata模块
+
+　　　　(1)模块概述
+
+　　　　Promotiondata模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+　　　　Promotiondata模块的职责及接口参见软件体系结构描述文档表。
+
+　　　　(2)整体结构
+
+　　　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如业务逻辑层和数据层之间，我们添加dataservice.promotiondataservice.PromotionDataService接口。PromotionPO是作为促销记录的持久化对象被添加到设计模型中去的。
+
+　　Promotiondata模块各个类的职责如下所示
+<br/>
+
+|模块|职责|
+| --- | --- |
+|PromotionData|促销的模型对象，拥有促销策略单据的各类数据以及方法|
+
+　　　　(3)模块内部类的接口规范
+
+　　　MemberData的接口规范
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|`PromotionDataService.find(String keywords, FindPromotionType type)`|根据keywords查找单一持久化对象|
+|`PromotionDataService.insert(PromotionPO po)`|新建单一持久化对象|
+|`PromotionDataService.delete(String id)`|删除单一持久化对象|
+|`PromotionDataService.update(PromotionPO po)`|更新单一持久化对象|
+|`PromotionDataService.show()`|返回数据库中所有持久化对象|
+<br/>
+
+4.3.11　Classificationdata模块
+
+　　　　(1)模块概述
+
+　　　　Classificationdata模块承担的需求参见需求规格说明文档功能需求几相关非功能需求。
+　　　　Classificationdata模块的职责及接口参见软件体系结构描述文档表。
+
+　　　　(2)整体结构
+
+　　　　根据体系结构的设计，我们将系统分为展示层、业务逻辑层、数据层。每一层之间为了增加灵活性，我们会添加接口。比如业务逻辑层和数据层之间，我们添加dataservice.classificationdataservice.ClassificationDataService接口。ClassificationPO是作为分类记录的持久化对象被添加到设计模型中去的。
+
+　　Classificationdata模块各个类的职责如下所示
+<br/>
+
+|模块|职责|
+| --- | --- |
+|ClassificationData|促销的模型对象，拥有促销策略单据的各类数据以及方法|
+
+　　　　(3)模块内部类的接口规范
+
+　　　MemberData的接口规范
+
+|提供的服务|供接口|
+| --- | --- |
+|服务名|服务|
+|`ClassificationDataService.find(String name)`|根据name查找单一持久化对象|
+|`ClassificationDataService.insert(ClassificationPO po)`|新建单一持久化对象|
+|`ClassificationDataService.delete(String id)`|删除单一持久化对象|
+|`ClassificationDataService.update(ClassificationPO po)`|更新单一持久化对象|
+|`ClassificationDataService.show()`|返回数据库中所有持久化对象|
+|`ClassificationDataService.FindClassificationById()`|根据id查找单一持久化对象|
+|`ClassificationDataService.getRoot()`|返回分类的根节点|
+
+<br/>
+
+
+
+##5.依赖视角
+下面两图是客户端和服务器各自的包之间的依赖关系<br>
+<img src="../img/客户端开发包图.png"><br>
+<center>客户端包图</center>
+<img src="../img/服务端开发包.png"><br>
+<center>服务器端端包图</center>
