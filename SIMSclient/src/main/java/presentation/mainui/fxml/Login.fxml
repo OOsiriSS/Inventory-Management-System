@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#enterKey" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #CCDDFF;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presentation.mainui.MainUI">
+	<children>
+		<ImageView fitHeight="400.0" fitWidth="625.0" pickOnBounds="true" preserveRatio="true">
+			<image>
+				<Image url="@../img/登录界面.jpg" />
+			</image>
+		</ImageView>
+		<TextField fx:id="username" layoutX="147.0" layoutY="163.0" prefHeight="37.0" prefWidth="306.0" style="-fx-color: -fx-focused-base; -fx-border-color: #CCCCFF; -fx-border-style: solid; -fx-background-color: rgba(0,0,0,0.2);" styleClass="aa">
+			<font>
+				<Font name="Arial" size="15.0" />
+			</font>
+		</TextField>
+		<PasswordField fx:id="password" layoutX="147.0" layoutY="225.0" prefHeight="37.0" prefWidth="306.0" style="-fx-color: -fx-focused-base; -fx-border-style: solid; -fx-border-color: #CCCCFF; -fx-background-color: rgba(0,0,0,0.2);" styleClass="aa">
+			<font>
+				<Font name="Arial" size="15.0" />
+			</font>
+		</PasswordField>
+		<Button layoutX="147.0" layoutY="292.0" mnemonicParsing="false" onAction="#enterButton" prefHeight="40.0" prefWidth="306.0" style="-fx-background-color: #CCCCEE;" text="安  全  登  录" textOverrun="CLIP">
+			<font>
+				<Font name="syht Italic" size="19.0" />
+			</font>
+		</Button>
+	</children>
+</AnchorPane>

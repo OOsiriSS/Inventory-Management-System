@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#exitKey"
+	prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="presentation.mainui.RemindUI">
+	<children>
+		<Label layoutX="-1.0" layoutY="43.0" prefHeight="66.0"
+			prefWidth="287.0" text="                         用户名或者密码错误！" />
+		<Button fx:id="button" layoutX="90.0" layoutY="116.0"
+			mnemonicParsing="false" onAction="#confirm" prefHeight="44.0"
+			prefWidth="120.0" text="确      定" />
+	</children>
+</AnchorPane>
