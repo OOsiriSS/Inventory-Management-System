@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+	prefWidth="1050.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="presentation.financialstaffui.controller.InitAccountController">
+	<children>
+		<ImageView fitHeight="600.0" fitWidth="150.0" pickOnBounds="true"
+			preserveRatio="true">
+			<image>
+				<Image url="@../img/管理.jpg" />
+			</image>
+		</ImageView>
+		<Button layoutX="150.0" layoutY="4.0" mnemonicParsing="false"
+			onAction="#returnLast" prefHeight="43.0" prefWidth="47.0"
+			style="-fx-background-color: rgba(0,0,0,0);">
+			<graphic>
+				<ImageView fitHeight="50.0" fitWidth="45.0" pickOnBounds="true"
+					preserveRatio="true">
+					<image>
+						<Image url="@../img/返回.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button layoutX="211.0" layoutY="6.0" mnemonicParsing="false"
+			onAction="#mainPage" prefHeight="44.0" prefWidth="54.0"
+			style="-fx-background-color: rgba(0,0,0,0);">
+			<graphic>
+				<ImageView fitHeight="40.0" fitWidth="47.0" pickOnBounds="true"
+					preserveRatio="true">
+					<image>
+						<Image url="@../img/主页.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button layoutX="327.0" layoutY="9.0" mnemonicParsing="false"
+			onAction="#message" prefHeight="43.0" prefWidth="47.0"
+			style="-fx-background-color: rgba(0,0,0,0);">
+			<graphic>
+				<ImageView fitHeight="36.0" fitWidth="44.0" pickOnBounds="true"
+					preserveRatio="true">
+					<image>
+						<Image url="@../img/消息.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button layoutX="955.0" layoutY="8.0" mnemonicParsing="false"
+			onAction="#logout" prefHeight="43.0" prefWidth="47.0"
+			style="-fx-background-color: rgba(0,0,0,0);">
+			<graphic>
+				<ImageView fitHeight="41.0" fitWidth="38.0" pickOnBounds="true"
+					preserveRatio="true">
+					<image>
+						<Image url="@../img/注销.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<ImageView fx:id="image" fitHeight="100.0" fitWidth="127.0"
+			layoutX="12.0" layoutY="123.0" pickOnBounds="true" preserveRatio="true">
+			<image>
+				<Image url="@../img/用户.png" />
+			</image>
+		</ImageView>
+		<Button layoutX="385.0" layoutY="67.0" mnemonicParsing="false"
+			onAction="#check" prefHeight="23.0" prefWidth="68.0" text="查   看" />
+		<Button layoutX="522.0" layoutY="526.0" mnemonicParsing="false"
+			onAction="#init" prefHeight="32.0" prefWidth="114.0" text="新     建" />
+		<ImageView fitHeight="60.0" fitWidth="114.0" layoutX="11.0"
+			layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+			<image>
+				<Image url="@../img/Logo.png" />
+			</image>
+		</ImageView>
+		<Button layoutX="14.0" layoutY="260.0" mnemonicParsing="false"
+			onAction="#accountManage" prefHeight="60.0" prefWidth="136.0"
+			style="-fx-background-color: rgba(0,0,0,0);" text="账户管理" textFill="WHITE">
+			<font>
+				<Font name="syht Italic" size="16.0" />
+			</font>
+			<graphic>
+				<ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true"
+					preserveRatio="true">
+					<image>
+						<Image url="@../img/账户.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button layoutX="259.0" layoutY="9.0" mnemonicParsing="false"
+			onAction="#fresh" prefHeight="44.0" prefWidth="68.0"
+			style="-fx-background-color: rgba(0,0,0,0);">
+			<graphic>
+				<ImageView fitHeight="150.0" fitWidth="35.0" pickOnBounds="true"
+					preserveRatio="true">
+					<image>
+						<Image url="@../img/刷新.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button layoutX="7.0" layoutY="320.0" mnemonicParsing="false"
+			onAction="#makeReceipt" prefHeight="60.0" prefWidth="136.0"
+			style="-fx-background-color: rgba(0,0,0,0);" text="制作单据" textFill="WHITE">
+			<font>
+				<Font name="syht Italic" size="16.0" />
+			</font>
+			<graphic>
+				<ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true"
+					preserveRatio="true">
+					<image>
+						<Image url="@../img/盘点.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button layoutX="7.0" layoutY="380.0" mnemonicParsing="false"
+			onAction="#viewTable" prefHeight="60.0" prefWidth="136.0"
+			style="-fx-background-color: rgba(0,0,0,0);" text="查看表格" textFill="WHITE">
+			<font>
+				<Font name="syht Italic" size="16.0" />
+			</font>
+			<graphic>
+				<ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true"
+					preserveRatio="true">
+					<image>
+						<Image url="@../img/表格.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button layoutX="8.0" layoutY="437.0" mnemonicParsing="false"
+			onAction="#initAccount" prefHeight="60.0" prefWidth="136.0"
+			style="-fx-background-color: rgba(0,0,0,0);" text="期初建账" textFill="WHITE">
+			<font>
+				<Font name="syht Italic" size="16.0" />
+			</font>
+			<graphic>
+				<ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true"
+					preserveRatio="true">
+					<image>
+						<Image url="@../img/建账.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<TableView fx:id="commodity" layoutX="201.0" layoutY="114.0"
+			prefHeight="109.0" prefWidth="755.0">
+			<columns>
+				<TableColumn fx:id="commodityClass" prefWidth="150.0"
+					text="商品分类" />
+				<TableColumn fx:id="commodityName" prefWidth="150.0"
+					text="名称" />
+				<TableColumn fx:id="commodityModel" prefWidth="150.0"
+					text="型号" />
+				<TableColumn fx:id="commodityPurPrice" prefWidth="75.0"
+					text="进价" />
+				<TableColumn fx:id="commodityRetailedPrice" prefWidth="75.0"
+					text="售价" />
+				<TableColumn fx:id="commodityRecPurPrice" prefWidth="75.0"
+					text="最新进价" />
+				<TableColumn fx:id="commodityRecRetailedPrice"
+					prefWidth="75.0" text="最新售价" />
+			</columns>
+		</TableView>
+		<TableView fx:id="member" layoutX="201.0" layoutY="246.0"
+			prefHeight="109.0" prefWidth="755.0">
+			<columns>
+				<TableColumn fx:id="memberCategory" prefWidth="150.0"
+					text="客户分类" />
+				<TableColumn fx:id="memberName" prefWidth="165.0" text="名称" />
+				<TableColumn fx:id="memberPhone" prefWidth="200.0" text="联系方式" />
+				<TableColumn fx:id="memberReceive" prefWidth="120.0"
+					text="应收" />
+				<TableColumn fx:id="memberPay" prefWidth="120.0" text="应付" />
+			</columns>
+		</TableView>
+		<Label layoutX="201.0" layoutY="99.0" text="商品信息" />
+		<Label layoutX="201.0" layoutY="231.0" text="客户信息" />
+		<Label layoutX="201.0" layoutY="373.0" text="账户信息" />
+		<TableView fx:id="account" layoutX="201.0" layoutY="386.0"
+			prefHeight="109.0" prefWidth="755.0">
+			<columns>
+				<TableColumn fx:id="accountName" prefWidth="400.0" text="名称" />
+				<TableColumn fx:id="accountMoney" prefWidth="355.0"
+					text="余额" />
+			</columns>
+		</TableView>
+		<ComboBox fx:id="yearChoice" layoutX="201.0" layoutY="67.0"
+			prefHeight="23.0" prefWidth="184.0" />
+	</children>
+</AnchorPane>
